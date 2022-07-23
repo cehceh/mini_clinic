@@ -1,0 +1,72 @@
+{% extends 'index.html' %} 
+<!-- {% load static %}  -->
+{% load render_table from django_tables2 %} 
+<!-- {% load crispy_forms_tags %}  -->
+<!-- {% load export_url from django_tables2 %} -->
+
+
+{% block content %}
+    <div>
+        <p class="float-left">
+            <h1><strong>Yearly Report</strong></h1>
+        </p>
+        <a type="button" class="btn btn-outline-primary" href="{% url 'reports:print_html' %}">
+            Print Preview
+        </a>
+        <button class="btn btn-outline-success" id="print" onclick="printData()">
+            Print 
+        </button>
+        <!-- <a class="btn btn-outline-success" href="{% url 'reports:fast_print' %}">
+            Fast Print 
+        </a> -->
+    </div>
+    <br><br>
+    <div class="container">
+        {% render_table year_table %}
+    </div>
+    <div id="pdata" hidden>
+        {% render_table print_table %}
+    </div>
+        
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+    function printData() {
+    var divToPrint = document.getElementById('pdata');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+        'table th, table td {' +
+        'border:1px solid #000;' +
+        'padding:0.5em;' +
+        'width:100%;' +
+        'white-space:nowrap;' + // this line to make the cells flixable
+        '}' +
+        'p {' +
+        'text-align: right' +
+        'margin-bottom:0;' +
+        'padding:0;' +
+        'line-height:12px;' +
+        'font-size:10px;' +
+        '}' +
+        '#pdata {display: block;}' +
+        '@media print {' +
+        'nav { visibility: hidden; }' + // for remove pagination from    
+        // printing
+        '}' +
+        '</style>';
+    htmlToPrint += divToPrint.outerHTML;
+    newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+}
+
+</script>
+{% endblock  %}
+

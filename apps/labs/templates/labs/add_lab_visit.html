@@ -1,0 +1,118 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load render_table from django_tables2 %} {% load widget_tweaks %} {% load static %}
+<!--  -->
+{% block content %}
+<div class="container" id="add-drug">
+
+    {% if match_lab %} {% else %}
+    <!-- for empty prescription -->
+    <div class="alert {{ message.tags }} alert-dismissible fade show" style="background-color: lightpink; width: 98%; height: 100%; margin: 10px; padding: 15px;" role="alert">
+        <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+            Please add analysis to this prescription
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: black; margin: 5px; padding: 5px;">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </li>
+    </div>
+    {% endif %}
+    <br>
+
+    <div class="float-left">
+        <h1 style="color: black;">
+            <strong>
+                Add Lab Prescription for ({{patient}})
+            </strong>
+        </h1>
+        <!-- <input class="float-right" type="text" name="pages" id="pages"> -->
+        <p>
+            <h3 style="color: black;">Visit Date : {{ vis_date }}</h3>
+        </p>
+        <br>
+        <!-- <br><br><br> -->
+    </div>
+
+    <div class="container float-right" style="width: 100%; height: 100%;">
+        <!-- <input type="text" value="{{vis_date}}" name="vis-date" id="vis-date"> -->
+        <!-- <a class="btn btn-outline-dark" href="{% url 'visitdrug:save_medicine' patid visid %}" role="button">
+            Add New Prescription
+        </a> -->
+        <a class="btn btn-outline-dark" href="{% url 'visits:pass_patient_id' patid %}" role="button" id="new-visit">
+            New Visit
+        </a>
+        <a class="btn btn-outline-primary" href="{% url 'patientdata:edit_patient' patid %}" role="button" id="edit-patient">
+            Edit Patient
+        </a>
+        <a class="btn btn-outline-primary" href="{% url 'visits:visits_patient_id' visid patid %}" role="button">
+            Edit This Visit
+        </a>
+        <a class="btn btn-outline-dark" href="{% url 'patientdata:save_operation' patid %}" role="button">
+            Add Operation Details
+        </a>
+        <!--  -->
+        {% if match_lab %}
+        <a class="btn btn-outline-success" href="{% url 'labs:print_html' visid %}" role="button">
+            Print Perview
+            </a> {% else %}
+
+        <a class="btn btn-outline-primary float-right" href="#add_drugs_to_prescription" role="button">
+                Please Add Drugs 
+            </a> {% endif %}
+        <br><br>
+        <hr>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <!--  -->
+        <div class="float-left" style="width: 30%;height: 100%;">
+            <br>
+            <div style="background-color: pink;">
+                {{save_medicine_form.non_field_errors}}
+            </div>
+
+            {{ lab_form.name.label_tag }} {% render_field lab_form.name %} <br>
+            <!--  -->
+            <!-- {{ lab_form.result.label_tag }} {% render_field lab_form.result %} <br> -->
+            <!--  -->
+            {{ lab_form.image.label_tag }} {{ lab_form.image }}
+            <br>
+            <!--  -->
+            {{ lab_form.file.label_tag }} {% render_field lab_form.file %} <br>
+
+            <hr>
+            <button type="submit" class="btn btn-outline-dark">
+                Add
+            </button>
+
+        </div>
+        <br>
+        <div class="float-right" style="width: 65%; height: 100%; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+            <br> {% render_table lab_table %}
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+<!--  -->
+{% block scripts %}
+<script>
+    var addDrug = new Vue({
+        el: '#add-drug',
+        delimiters: ['[[', ']]'],
+        data: {
+            plan: '',
+            name: '',
+        },
+        computed: {
+            // changeLanguage: function(){
+            //     this.plan = navigator.language;// 
+            //     console.log('plan-changes=' + this.plane);
+            //     return this.plan;
+            // }
+        },
+    })
+</script>
+
+
+{% endblock %}

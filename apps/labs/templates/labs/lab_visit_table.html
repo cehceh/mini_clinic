@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load render_table from django_tables2 %} 
+
+{% block content %}
+
+<!-- <div class="align-content-center" style="background-color:transparent; width: 1300px; height: 900px; margin: 20px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey; display: grid;" id="save-visits-div"> -->
+  <p class="float-left">
+    <h1><strong>Add Lab Analysis Prescription </strong></h1>
+  </p>
+  <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'labs:lab_visit_table' %}">
+
+    <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here.." value="{{request.GET.pageno}}" aria-label="Search">
+    <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    
+  </form>
+  <br><br>
+  {% render_table lab_visit_table %}
+<!-- </div> -->
+  
+{% endblock %}
+

@@ -1,0 +1,99 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} 
+{% load render_table from django_tables2 %} 
+{% load static %}
+<!--  -->
+
+{% block content %}
+
+<div >
+    <h1 style="color: black;"><strong>Update Revisit for ({{patient}})</strong></h1>
+</div>
+<hr>
+<!-- <div class="align-content-center float-left" style="background-color:transparent; width: 100%; height: 100%; margin: 10px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;"> -->
+    
+<div class="container">
+    <a class="btn btn-outline-dark" href="{% url 'visits:pass_patient_id' patient_id %}" role="button" id="new-visit">
+        Add New Visit
+    </a>
+    <a class="btn btn-outline-dark" href="{% url 'revisits:save_revisit' patient.id visit.id %}" role="button" id="edit-patient">
+        Add New Revisit
+    </a>
+    <a class="btn btn-outline-primary" href="{{ patient.get_absolute_url}}" role="button" id="edit-patient">
+        Edit Patient Data
+    </a>
+    <a class="btn btn-outline-primary" href="{% url 'visits:visits_patient_id' visit.id patient.id %}" role="button" id="edit-patient">
+        Edit Visit No. {{visit}}
+    </a>
+    <!--  -->
+    {% if present %}
+    <a class="btn btn-outline-primary" href="{% url 'presenthistory:edit_present_hist' patient.id visit.id present_id.id %}" role="button" id="present-history">
+        Edit Present History
+    </a>
+    <!--  -->
+    {% else %}
+    <a class="btn btn-outline-danger" href="{% url 'presenthistory:save_present_hist' patient.id visit.id  %}" role="button" id="present-history">
+        Add Present History
+    </a>
+    <!--  -->
+    {% endif %}
+    <!-- <a class="btn btn-secondary" href="#under construction" role="button">
+        Prescription
+    </a> -->
+    
+    <!-- <a class="btn btn-success float-right" href="{% url 'revisits:view_revisit' visit.id patient.id %}" role="button">
+        All Revists for Visit No. {{visit}}
+    </a> -->
+</div>
+    <!-- <a class="btn btn-primary" href="{{ query.get_absolute_url }}" role="button">
+            Prescription function
+        </a> -->
+    <hr>
+<!-- </div> -->
+<!-- <br>
+<br> -->
+
+<!-- <div class="align-content-center float-right" style="background-color:transparent; width: 25%; height: 100%; margin: 10px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;"> -->
+    <!-- <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="{% url 'search:search_visit' %}">
+
+        <input class="form-control mr-sm-2" type="text" name='vis' placeholder="Search Visits ..." value="{{request.GET.vis}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form> -->
+    <!-- <hr> -->
+<!-- </div> -->
+<br>
+<br>
+<!-- <hr> -->
+<form method="post">{% csrf_token %}
+    <!--  -->
+    <!-- {{ save_visits_form|crispy }} <br><br> -->
+    <!-- <hr> -->
+    <div class="float-left" style="width:45%; height:45%;" id="left-saverevis-div">
+        <!-- {{edit_revisits_form.visit.label_tag}} {{bound_form.visit}} <br>
+        {{edit_revisits_form.patient.label_tag}} {{bound_form.patient}} <br> -->
+        {{edit_revisits_form.visitdate.label_tag}} {{edit_revisits_form.visitdate}} <br>
+        
+        {{edit_revisits_form.complain.label_tag}} {{edit_revisits_form.complain}} <br>
+        
+        {{edit_revisits_form.amount.label_tag}} {{edit_revisits_form.amount}}
+        <hr>
+        
+        <button type="submit" class="btn btn-dark id="savepatform-btn">
+            Update
+        </button>
+
+    </div>
+    <div class="float-right" style="width:45%; height:45%;" id="right-saverevis-div">
+        
+        <!--  -->
+        {{edit_revisits_form.diagnosis.label_tag}} {{edit_revisits_form.diagnosis}} <br>
+        <!--  -->
+        {{edit_revisits_form.sign.label_tag}} {{edit_revisits_form.sign}} <br>
+        <!--  -->
+        {{edit_revisits_form.intervention.label_tag}} {{edit_revisits_form.intervention}}
+        <hr>
+    </div>
+</form>
+
+  
+{% endblock %}
+

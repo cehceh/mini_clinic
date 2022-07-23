@@ -1,0 +1,71 @@
+{% load static %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4" id="nav-id">
+    <a class="navbar-brand" href="{% url 'patientdata:table_patient' %}">Etman Clinic</a>
+    <!-- <a class="navbar-brand" href="/"> <img :src="image"></a> -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <!-- <ul class="navbar-nav ml-auto">
+            <form class="form-inline ml-auto">
+                <a href="{{request.META.HTTP_REFERER}}" class="btn btn-outline-warning ml-2">
+                    << </a>
+            </form>
+        </ul> -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{request.META.HTTP_REFERER}}">
+                    <span class="fa fa-backward"> Back </span> </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'patientdata:save_patient' %}" class="navbar-item">
+                    <span class='fa fa-user-plus'> Add New Patient</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'presenthistory:table_add_present_hist' %}" class="navbar-item">
+                    <span class='fa fa-book-medical'> Add Present History</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'patientdata:operation_table' %}" class="navbar-item">
+                    <span class='fa fa-procedures'> All Operation Details</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'patientdata:table_patient' %}" class="navbar-item">
+                    <span class='fa fa-hospital-user'> All Patients</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'visits:table_visits' %}" class="navbar-item">
+                    <span class='fa fa-syringe'></span> All Visits</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <form class="form-inline ml-auto">
+                <!-- <a href="{% url 'talk_with_reg' %}" class="btn btn-outline-secondary">Reg</a> -->
+                <a href="{% url 'backup' %}" class="btn btn-outline-success ml-2">Backup </a>
+            </form>
+            <!-- <li class="nav-item active">
+                <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Wellcome: Dr Mohamed Etman
+                </a>
+            </li> -->
+        </ul>
+
+    </div>
+
+</nav>
+
+<!-- <script>
+    var vue = new Vue({
+        el: '#nav-id',
+        delimiters: ['[', ']'],
+        data: {
+            // msg: ' coded by Amr Aly',
+            image: "{% static 'img/k5.png' %}",
+        },
+    });
+</script> -->

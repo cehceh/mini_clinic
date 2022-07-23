@@ -1,0 +1,140 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load render_table from django_tables2 %} {% load static %} {% block content %}
+
+<div id="edit-visit">
+
+    {% if match %} {% if messages %} {% for message in messages %}
+    <article class="message is-{{ message.tags }}">
+        <div class="message-body">
+            {{ message }}
+        </div>
+    </article>
+
+    {% endfor %} {% endif %} {% endif %}
+
+
+    <solid>
+        <h1 style="color:black">Update Visit For Patient({{patient.patient.name}})</h1>
+    </solid>
+    <hr>
+    <a class="btn btn-outline-dark" href="{% url 'visits:pass_patient_id' patient_id %}" role="button" id="new-visit">
+        Add New Visit
+    </a>
+    <!-- <a class="btn btn-outline-primary" href="{% url 'revisits:save_revisit' patient.id visit.id %}" role="button" id="edit-patient">
+        Add Revisit
+    </a> -->
+    <!--  -->
+    <!-- {% if match_revisit %}
+    <a class="btn btn-outline-dark" href="{% url 'revisits:save_revisit' patient.id visit.id %}" role="button">
+        Add Revisit
+    </a> {% else %}
+    <a class="btn btn-outline-danger" href="{% url 'revisits:save_revisit' patient.id visit.id %}" role="button">
+        Add Revisit
+    </a> {% endif %} -->
+
+    <a class="btn btn-outline-primary" href="{{ patient.patient.edit_patient_url }}" role="button" id="edit-patient">
+        Edit Patient Data
+    </a>
+    <!--  -->
+    {% if match_present %}
+    <a class="btn btn-outline-primary" href="{% url 'presenthistory:edit_present_hist' patient.id visit.id present_id.id %}" role="button" id="present-history">
+            Update Present History
+    </a> {% else %}
+    <a class="btn btn-outline-danger" href="{% url 'presenthistory:save_present_hist' patient.id visit.id %}" role="button" id="present-history">
+            Add Present History
+    </a> {% endif %}
+    <!--  -->
+    <a class="btn btn-outline-dark" href="{% url  'patientdata:save_operation' patient_id %}" role="button">
+        Add Operation Details
+    </a>
+    <a class="btn btn-outline-dark" href="{% url 'pasthistory:save_pasthist' patient_id %}" role="button">
+        Add Past History
+    </a>
+    <!--  -->
+    {% if lab %}
+    <a class="btn btn-outline-primary" href="{% url 'labs:add_lab_visit' patient_id vis_id  %}" role="button">
+        Edit Analysis 
+    </a> {% else %}
+    <a class="btn btn-outline-danger" href="{% url 'labs:add_lab_visit' patient_id vis_id %}" role="button">
+        Add Analysis
+    </a> {% endif %}
+    <!--  -->
+    {% if medicine %}
+    <a class="btn btn-secondary" href="{% url 'visitdrug:save_medicine' patient_id vis_id %}" role="button">
+        See Prescription 
+    </a> {% else %}
+    <a class="btn btn-outline-danger" href="{% url 'visitdrug:save_medicine' patient_id vis_id %}" role="button">
+        Add Prescription
+    </a> {% endif %}
+    <!--  -->
+    <!-- <a class="btn btn-outline-danger" href="{% url 'labs:add_lab_visit' patient_id vis_id %}" role="button">
+        Add Analysis
+    </a> -->
+
+    <!-- <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="#">
+
+        <input class="form-control mr-sm-2" type="text" name='vis' placeholder="Search Visits ..." value="{{request.GET.vis}}" aria-label="Search">
+       
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        
+    </form> -->
+    <hr>
+
+    <form method="POST">{% csrf_token %}
+        <!--  -->
+        <div style="background-color: pink;">
+            {{edit_visits_form.non_field_errors}}
+        </div>
+        <!-- {{edit_visits_form | crispy }} -->
+        <div class="float-left" style="width: 45%; height: 100%;" id="left">
+            <!-- <div class="float-left" id="left"> -->
+            <!-- {{edit_visits_form.id.label_tag}} {{edit_visits_form.id}} <br>
+            {{edit_visits_form.patient.label_tag}} {{edit_visits_form.patient}} <br> -->
+            {{edit_visits_form.visitdate.label_tag}} {{edit_visits_form.visitdate}} <br> {{edit_visits_form.complain.label_tag}} {{edit_visits_form.complain}} <br> {{edit_visits_form.amount.label_tag}} {{edit_visits_form.amount}}
+            <hr>
+
+            <input type="submit" class="btn btn-outline-primary" value="Update" id="vis-form-btn" />
+        </div>
+        <div class="float-right" style="width: 45%; height: 100%;" id="right">
+
+            {{edit_visits_form.diagnosis.label_tag}} {{edit_visits_form.diagnosis}} <br> {{edit_visits_form.sign.label_tag}} {{edit_visits_form.sign}} <br> {{edit_visits_form.intervention.label_tag}} {{edit_visits_form.intervention}}
+            <hr>
+        </div>
+    </form>
+    <!-- </div> -->
+</div>
+
+<!-- https://stackoverflow.com/questions/1074212/how-can-i-see-the-raw-sql-queries-django-is-running -->
+{%if sql_queries and debug %}
+<div class="footNav">
+    <h2>Queries</h2>
+    <p>
+        {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}, {{sql_time_sum}} Time {% ifnotequal sql_queries|length 0 %} (
+        <span style="cursor: pointer;" onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show Debugging Tool</span>) {% endifnotequal %}
+    </p>
+    <table id="debugQueryTable" style="display: none;">
+        <col width="1"></col>
+        <col></col>
+        <col width="1"></col>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">SQL</th>
+                <th scope="col">Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for query in sql_queries %}
+            <!-- -->
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ query.sql|escape }}</td>
+                <td>{{ query.time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<!--  -->
+{% endblock %}

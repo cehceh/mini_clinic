@@ -1,0 +1,98 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load render_table from django_tables2 %} {% load static %} {% load widget_tweaks %}
+
+<!--  -->
+
+{% block content %}
+<!--  -->
+
+
+<solid>
+    <h1 style="color:black">Update Present History for ({{patient}})</h1>
+</solid>
+<hr>
+<div class="container">
+    <a class="btn btn-outline-dark" href="{% url 'visits:pass_patient_id' patient.id %}" role="button" id="new-visit">
+        Add New Visit
+    </a>
+    <a class="btn btn-outline-primary" href="{{ patient.get_absolute_url}}" role="button" id="edit-patient">
+        Edit Patient
+    </a> {% if match_medicine %}
+    <a class="btn btn-outline-success" href="{% url 'visitdrug:save_medicine' patient.id visit.id %}" role="button">
+            Display Prescription
+        </a> {% else %}
+    <a class="btn btn-outline-danger" href="{% url 'visitdrug:save_medicine' patient.id visit.id %}" role="button">
+            Add Prescription
+        </a> {% endif %}
+    <a class="btn btn-outline-dark" href="{% url 'presenthistory:save_present_hist' patient.id visit.id %}" role="button">
+        Return To Add Present History
+    </a>
+    <!-- <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="#">
+        <input class="form-control mr-sm-2" type="text" name='vis' placeholder="Search Visits ..." value="{{request.GET.vis}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form> -->
+</div>
+
+<hr>
+<!--  -->
+<form method="POST">{% csrf_token %}
+    <!--  -->
+    <div style="background-color: pink;">
+        {{edit_present_hist_form.non_field_errors}}
+    </div>
+    <!-- {{edit_visits_form | crispy }} -->
+
+    <div class="float-left" style="float:left; width: 15%; height: 100%;  margin: 10px; padding: 20px;" id="">
+        {{edit_present_hist_form.temprature.label_tag}} {{edit_present_hist_form.temprature}} <br />
+        <!--  -->
+        {{edit_present_hist_form.weight.label_tag}} {{edit_present_hist_form.weight}} <br />
+        <!--  -->
+        {{edit_present_hist_form.height.label_tag}} {{edit_present_hist_form.height}} <br />
+        <!--  -->
+        {{edit_present_hist_form.cholestrol.label_tag}} {{edit_present_hist_form.cholestrol}}
+        <hr>
+        <input type="submit" class="btn btn-outline-primary" value="Update" id="vis-form-btn">
+    </div>
+    <div class="float-left" style="float:right; width: 15%; height: 100%;  margin: 10px; padding: 20px;">
+        {{edit_present_hist_form.pulse.label_tag}} {{edit_present_hist_form.pulse}} <br />
+        <!--  -->
+        {{edit_present_hist_form.bloodpr.label_tag}} {{edit_present_hist_form.bloodpr}} <br />
+        <!--  -->
+        {{edit_present_hist_form.bsl.label_tag}} {{edit_present_hist_form.bsl}} <br />
+        <!--  -->
+        {{edit_present_hist_form.hb.label_tag}} {{edit_present_hist_form.hb}}
+        <hr>
+    </div>
+    <!-- <div class="float-right" style="float:left; width: 30%; height: 100%; margin: 10px; padding: 20px;" id=""> -->
+
+    <!-- {{edit_present_hist_form.id.label_tag}}
+        {{edit_present_hist_form.id}} <br />
+        
+        {{edit_present_hist_form.visitdate.label_tag}} 
+        {{visitform.visitdate}} <br>
+        
+        {{edit_present_hist_form.patient.label_tag}} 
+        {{visitform.patient}} <br>
+        
+        {{edit_present_hist_form.visit.label_tag}} {{visitform.visit}}
+        
+        <hr> -->
+    <!-- </div> -->
+    <div class="float-right" style="width: 60%; height: 100%; margin: 10px; padding: 20px; background-color:white; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+        <!-- <p>
+            <strong>Present History</strong>
+        </p><br>
+        <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'presenthistory:table_add_present_hist' %}">
+            <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here..." value="{{request.GET.pageno}}" aria-label="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button> 
+        </form><br><br> -->
+        {% render_table all_presenthistory_table %}
+    </div>
+
+</form>
+
+
+
+{% endblock %}
+
+<!--  -->
+{% block scripts %} {% endblock %}

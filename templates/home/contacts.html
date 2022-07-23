@@ -1,0 +1,24 @@
+{% extends 'index.html' %}
+{% load i18n %}
+
+{% block content %}
+    
+<section class="hero is-medium is-info is-bold">
+    
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">{% trans 'You can contact me and I will be happy by your call. ' %}</h1> <br>
+            
+                <h2 class="subtitle">{% trans 'On 01067174141 or chat me on the same number via Whatsapp.' %}
+                </h2>
+            
+                <!-- <h2 class="subtitle">
+                    {% trans 'We will be happy if you join Our Clinic, Try to' %} 
+                    <a href="#"><strong>{% trans 'Sign up' %}</strong></a>{% trans 'now' %}  
+                </h2> -->
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

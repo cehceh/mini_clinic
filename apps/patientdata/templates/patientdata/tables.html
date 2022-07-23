@@ -1,0 +1,75 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load static %} {% load render_table from django_tables2 %} {% block content %}
+
+<!-- <div class="align-content-center" style="background-color:transparent; width: 1300px; height: 900px; margin: 20px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey; display: grid;" id="save-visits-div"> -->
+<p class="float-left">
+    <h1><strong>All Patinets Data</strong></h1>
+</p>
+<form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'patientdata:table_patient' %}">
+
+    <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here.." value="{{request.GET.pageno}}" aria-label="Search"> <br>
+
+    <!-- <input class="form-control mr-sm-2" type="text" name='patname' placeholder="Search Patient Name .." value="{{request.GET.patname}}" aria-label="Search"> <br>
+
+    <input class="form-control mr-sm-2" type="number" name='patid' placeholder="Search Patient ID .." value="{{request.GET.patid}}" aria-label="Search"> -->
+
+    <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+
+</form> &nbsp;&nbsp;
+
+<!-- <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'patientdata:table_patient' %}">
+
+    <input class="form-control mr-sm-2" type="text" name='patname' placeholder="Search Patient Name .." value="{{request.GET.patname}}" aria-label="Search">
+    <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    
+  </form> &nbsp;&nbsp;
+  <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'patientdata:table_patient' %}">
+
+    <input class="form-control mr-sm-2" type="number" name='patid' placeholder="Search Patient ID .." value="{{request.GET.patid}}" aria-label="Search">
+    <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    
+  </form> -->
+
+<br><br> {% render_table table_patient %}
+<!-- </div> -->
+
+
+<!-- https://stackoverflow.com/questions/1074212/how-can-i-see-the-raw-sql-queries-django-is-running -->
+{%if sql_queries and debug %}
+<div class="footNav">
+    <h2>Queries</h2>
+    <p>
+        {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}, {{sql_time_sum}} Time {% ifnotequal sql_queries|length 0 %} (
+        <span style="cursor: pointer;" onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show Debugging Tool</span>) {% endifnotequal %}
+    </p>
+    <table id="debugQueryTable" style="display: none;">
+        <col width="1"></col>
+        <col></col>
+        <col width="1"></col>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">SQL</th>
+                <th scope="col">Time</th>
+                <th scope="col"> </th>
+                <th scope="col">Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for query in sql_queries %}
+            <!-- -->
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ query.sql|escape }}</td>
+                <td>{{ query.time }}</td>
+                <td>
+                    ||==|| </td>
+                <td>{{ query.time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<!--  -->
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'index.html' %} {% load static %} {% load render_table from django_tables2 %} {% load crispy_forms_tags %} {% load export_url from django_tables2 %}
+<!--  -->
+{% block content %}
+
+<!--  -->
+{% if table_patient or table_patient_search %}
+
+<div class="align-content-center mr-sm-2" style="background-color:transparent; height: 70px; width: 1250px; margin: 30px;
+     padding: 15px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" 
+     id="search-div" hidden>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_patient' %}">
+
+        <input class="form-control mr-sm-2" type="text" name='ph' placeholder="Phone & Mobile..." value="{{request.GET.ph}}" aria-label="Search">
+        <!-- <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>&nbsp;&nbsp;&nbsp;&nbsp;
+    <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url '#"> -->
+        <!-- <input class="form-control mr-sm-2" type="text" name='pid' placeholder="Patient ID..." value="{{request.GET.pid}}" aria-label="Search"> -->
+
+        <input class="form-control mr-sm-2" type="text" name='card' placeholder="Card ID..." value="{{request.GET.card}}" aria-label="Search">
+        <!--  -->
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        <!--  -->
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="{% url 'search:search_patient' %}">
+        <input class="form-control mr-sm-2" type="text" name='pid' placeholder="Patient ID..." value="{{request.GET.pid}}" aria-label="Search">
+        <!-- <input class="form-control mr-sm-2" type="text" name='na' placeholder="Search Name..." value="{{request.GET.na}}" aria-label="Search"> -->
+        <!-- <input class="form-control mr-sm-2" type="text" name='add' placeholder="Search Address..." value="{{request.GET.add}}" aria-label="Search"> -->
+        <!--  -->
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        <!--  -->
+    </form>
+</div>
+<!--  -->
+{% else %}
+<!-- <div class="align-content-center mr-sm-2" style="background-color:transparent; height: 70px; width: 1350px; margin: 30px;
+     padding: 15px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="search-div">
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="#">
+
+        <input class="form-control mr-sm-2" type="text" name='day' placeholder="Search Day..." value="{{request.GET.day}}" aria-label="Search">
+        <input class="form-control mr-sm-2" type="text" name='month' placeholder="Search Month..." value="{{request.GET.month}}" aria-label="Search">
+        <input class="form-control mr-sm-2" type="text" name='year' placeholder="Search Year..." value="{{request.GET.year}}" aria-label="Search">
+        
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="#">
+
+        <input class="form-control mr-sm-2" type="text" name='from' placeholder="Search Date from ..." value="{{request.GET.from}}" aria-label="Search">
+        <input class="form-control mr-sm-2" type="text" name='to' placeholder="Search Date to ..." value="{{request.GET.to}}" aria-label="Search">
+        
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+       
+    </form>
+</div> -->
+{% endif %}
+
+<!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; margin: 30px;
+ padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px darkgray;" id="tables-div" name="mydiv">  -->
+    <!--  -->
+    {% if table_presenthistory_table %} 
+        {% if match_pat %}
+            <p class="float-left">
+                <h1><strong>Unkown Present History</strong></h1>
+            </p><br>
+            
+            {% render_table table_presenthistory_table %}
+        
+        {% else %}
+
+            {% render_table vistable_presenthistory_table %}
+            
+        {% endif %}
+    <!--  -->
+    {% elif table_presenthistory_visit %} 
+        <p class="float-left">
+            <h1><strong>Unkown Present History</strong></h1>
+        </p><br>
+        <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'presenthistory:table_add_present_hist' %}">
+            <input class="form-control mr-sm-2" type="text" name='pageno' placeholder="Edit pagination pages here..." value="{{request.GET.pageno}}" aria-label="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+        </form><br><br>
+        
+        {% render_table table_presenthistory_visit %}
+    <!--  -->
+    {% elif add_present_hist_table %} 
+        <p class="float-left">
+            <h1><strong>Add Present History</strong></h1>
+        </p><br>
+        <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'presenthistory:table_add_present_hist' %}">
+            <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here..." value="{{request.GET.pageno}}" aria-label="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button> 
+            <!-- <p hidden>{{ label }} {{ mac }}</p> -->
+        </form><br><br>
+        {% render_table add_present_hist_table %}
+        <!--  -->
+    {% elif pasthist_table %}
+        <p class="float-left">
+            <h1><strong>Past History</strong></h1>
+        </p><br>
+        <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'pasthistory:pasthist_table' %}">
+            <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here..." value="{{request.GET.pageno}}" aria-label="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+        </form><br><br>
+        {% render_table pasthist_table %}
+        <!--  -->
+    {% endif %}
+
+<!-- </div> -->
+
+{% endblock %}
+
+
+{% block scripts %}
+    <!-- <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script> -->
+    <script type="text/javascript">
+        // function printData() {
+        //     var divToPrint = document.getElementById("patients-table");
+        //     newWin = window.open("");
+        //     newWin.document.write(divToPrint.innerHTML);
+        //     newWin.print();
+        //     newWin.close();
+        // };
+    </script>
+{% endblock  %}

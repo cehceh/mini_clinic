@@ -1,0 +1,33 @@
+{% load static %}
+
+
+<!-- scripts for VUE -->
+<script src="{% static 'js/vue.js' %}"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+<!-- <script src="https://cdnjs.cloudfare.com/ajax/libs/axios/0.19.2/axios.min.js"> -->
+<script src="{% static 'js/jquery07.min.js' %}"></script>
+
+<script src="{% static 'js/axios.min.js' %}"></script>
+
+<script src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
+
+<script src="{% static 'js/popper07.min.js' %}"></script>
+
+<script src="{% static 'js/bootstrap07.min.js' %}"></script>
+
+<script src="{% static 'js/main07.js' %}"></script>
+
+<!-- <script src="{% static 'js/bootstrap413.min.js' %}"></script> -->
+
+<!-- <script src="{% static 'js/main.js' %}"></script> -->
+
+<script>
+    var vue = new Vue({
+        el: '#footer-vue',
+        delimiters: ['[', ']'],
+        data: {
+            msg: ' coded by Amr Aly - contact me on 01067174141',
+            image: "{% static 'img/k3.jpg' %}",
+        },
+    });
+</script>

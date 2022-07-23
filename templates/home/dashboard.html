@@ -1,0 +1,151 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+    
+<div class="container" style="position: relative; display: inline-block; height:100%; width:100%" id="dashboard">
+    <h1 class="title">Dashboard</h1>
+    <div class="row">  
+
+        <!-- first card -->
+        <div class="column is-6">
+            <div class="card card-link">
+                
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <img :src="pdata">
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <p class="title is-4">
+                            Patient Data
+                        </p>
+                    </div> 
+                </div>
+
+                <footer class="card-footer">
+                    <a class="button is-dark card-footer-item" href="{% url 'patientdata:save_patient' %}">
+                        New Patient</a>&nbsp;&nbsp;
+                    <a href="{% url 'patientdata:table_patient' %}" class="card-footer-item button is-primary">
+                        New Visit</a> &nbsp;&nbsp; 
+                </footer>
+            </div>
+        </div> <br>
+
+        <!-- second card -->
+        <div class="column is-6">
+            <div class="card card-link">
+                
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <img :src="gyna">
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <p class="title is-4">
+                            Gynecological Clinic
+                        </p>
+                    </div> 
+                </div>
+
+                <footer class="card-footer">
+                    <a class="button is-dark card-footer-item" href="{% url 'gyno:add_followup_table' %}">
+                        Add Follow Up Visit</a>&nbsp;&nbsp;
+                    <a href="#" class="button is-primary card-footer-item">
+                        Add Analysis</a>
+                </footer>
+                
+            </div>
+        </div> <br>
+
+        <!-- third card  -->
+        <div class="column is-6">
+            <div class="card card-link">
+                
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <img :src="history">  
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <p class="title is-4">
+                            History Data
+                        </p>
+                    </div> 
+                </div>
+
+                <footer class="card-footer">
+                    <a class="button is-dark card-footer-item" href="{% url 'patientdata:table_patient' %}">
+                        Add Past History</a>&nbsp;&nbsp;
+                    <a href="{% url 'presenthistory:table_add_present_hist' %}" class="card-footer-item button is-primary">
+                        Add Present History</a>
+                </footer>
+                
+            </div>
+        </div> <br>
+
+        <div class="column is-6">
+            <div class="card card-link">
+                
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <img :src="reports">
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <p class="title is-4">
+                            reports
+                        </p>
+                    </div> 
+                </div>
+
+                <footer class="card-footer">
+                    <a href="{% url 'reports:calculate_day_income' %}" class="card-footer-item button is-info">
+                        Daily Reports</a>&nbsp;&nbsp;
+                    <a href="{% url 'reports:calculate_month_income' %}" class="card-footer-item button is-primary">
+                        Monthly Reports</a> &nbsp;&nbsp;
+                    <a class="card-footer-item button is-info" href="{% url 'reports:calculate_year_income' %}">
+                        Yearly Reports</a>
+                </footer>
+                
+            </div>
+        </div> <br>
+
+            
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- scripts for VUE -->
+    <script src="{% static 'vue/vue.js' %}"></script>
+    <!-- <script src="https://cdnjs.cloudfare.com/ajax/libs/axios/0.19.2/axios.min.js"></script> -->
+
+    <script>
+        
+        var vue = new Vue ({
+            el: '#dashboard',
+            delimiters: ['[', ']'],
+            data: {
+                // images for dashbiard
+                pdata: "{% static 'img/pdata.jpg' %}",
+                gyna: "{% static 'img/gyna2.jpg' %}",
+                reports: "{% static 'img/r2.jpg' %}",
+                history: "{% static 'img/history.jpg' %}",
+            },
+        });
+
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,286 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load render_table from django_tables2 %} {% load static %} {% load widget_tweaks %}
+
+
+
+
+
+<!--  -->
+{% block content %}
+
+<!--  -->
+
+<div class="container" style="background-color: white;" id="editPatient">
+    <!-- <article class="message is-{{ message.tags }}">                 
+        <div class="message-body alert {{ message.tags }}" style="color: red;" role="alert">
+            {{ editpatform.non_field_errors }}
+        </div>
+    </article> -->
+
+    <solid>
+        <h1 style="color:black">Edit Patient</h1>
+    </solid>
+    <hr>
+    <div class="container">
+        <a class="btn btn-outline-dark" href="{% url 'visits:pass_patient_id' patient_id %}" role="button">
+            New Visit</a>
+        <a class="btn btn-outline-dark" href="{% url 'patientdata:save_patient' %}" role="button">
+            New Patient</a>
+        <!--  -->
+        <a class="btn btn-outline-dark" href="{% url  'patientdata:save_operation' patient_id %}" role="button">
+            Add Operation Details
+        </a>
+        <a class="btn btn-outline-dark" href="{% url 'pasthistory:save_pasthist' patient_id %}" role="button">
+            Add Past History
+        </a>
+    </div>
+    <hr>
+
+    <br><br>
+    <form method="POST" id="edit-pat-form">{% csrf_token %}
+        <!-- enctype="multipart/form-data" -->
+        <div class="float-left" style="background-color:transparent;height: 100%; width: 32%;" id="left-editpat-div">
+
+            <!-- {{ editpatform|crispy }} <br><br> -->
+            {{editpatform.name.label_tag}} {{editpatform.name}} <br>
+            <!--  -->
+            {{editpatform.address.label_tag}} {{editpatform.address}}
+            <br>
+            <!--  -->
+            {{editpatform.birth_date.label_tag}} {% render_field editpatform.birth_date v-model="dob" id="dob" %} <br>
+            <!--  -->
+            {{editpatform.age.label_tag}} {% render_field editpatform.age ::value="getAge" id="age" %} <br>
+            <!--  -->
+            {{editpatform.phone.label_tag}} {{editpatform.phone}} <br>
+            <!--  -->
+            {{editpatform.mobile.label_tag}} {{editpatform.mobile}} <br>
+            <!--  -->
+            {{editpatform.job.label_tag}} {{editpatform.job}} <br>
+            <!--  -->
+            {{editpatform.cardid.label_tag}} {{editpatform.cardid}}
+            <!-- {% render_field editpatform.cardid v-model="cardid" v-on::change="cardValue" id="cardid" %} -->
+            <!--  -->
+            <br>
+            <!--  -->
+            <!-- {{editpatform.barcode.label_tag.hidden }} {% render_field editpatform.barcode ::value="barcodeChanged + cardValue" hidden="true" %} <br> -->
+            <!--  -->
+            <!-- {% render_field editpatform.barurl ::value="urlChanged" hidden="true" %} -->
+
+            <!-- <br> -->
+            <!-- this.url + this.id + this.sign + this.dob + this.sign + this.cardid -->
+            <!-- {% if query.barimg %}
+            <div>
+                <a href="{% url 'patientdata:patient_details' barcode %}">
+                    <img class="image" src="{{ query.barimg.url }}">
+                </a>
+            </div> <br> {% endif %} -->
+            <br>
+            <button type="submit" class="button is-primary">Update</button>
+
+            <hr>
+        </div>
+
+        <div class="float-right" style="float:right; height: 100%; width: 60%;background-color:white; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="edit-pat-table-div">
+            {% render_table patient_visits_table %}
+        </div>
+
+    </form>
+</div>
+<!--  -->
+
+<!-- https://stackoverflow.com/questions/1074212/how-can-i-see-the-raw-sql-queries-django-is-running -->
+{%if sql_queries and debug %}
+<div class="footNav">
+    <h2>Queries</h2>
+    <p>
+        {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}, {{sql_time_sum}} Time {% ifnotequal sql_queries|length 0 %} (
+        <span style="cursor: pointer;" onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show Debugging Tool</span>) {% endifnotequal %}
+    </p>
+    <table id="debugQueryTable" style="display: none;">
+        <col width="1"></col>
+        <col></col>
+        <col width="1"></col>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">SQL</th>
+                <th scope="col">Time</th>
+                <th scope="col"> </th>
+                <th scope="col">Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for query in sql_queries %}
+            <!-- -->
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ query.sql|escape }}</td>
+                <td>{{ query.time }}</td>
+                <td>
+                    ||==|| </td>
+                <td>{{ query.time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+<!--  -->
+{% endblock %}
+<!--  -->
+{% block scripts %}
+
+<script type="text/javascript">
+    // $('#birth-date, #visitdate').datepicker({
+    //     dateFormat: "yy-mm-dd",
+    // });
+    // $('#birth-date').on('change', function() {
+    //     var dob = new Date($('#birth-date').val());
+    //     var today = new Date();
+    //     var age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000)); // $('#age').val(age); // });
+    //     $('#age').val(age);
+    // });
+</script>
+
+<script>
+    // Using Vue.js Here
+    var editPatient = new Vue({
+        el: '#editPatient',
+        delimiters: ['[[', ']]'],
+        // data () {
+        //     return 
+        data: {
+            patient_name: '',
+            title: "Add New Patient",
+            message: '{{ non_field_errors }}',
+            id: '{{ patient_id }}',
+            name: '',
+            cardid: '',
+            dob: new Date(),
+            age: '',
+            // url: 'http://192.168.1.120:8000/patientdata/patient/details/by/barcode/',
+            // barcode: '',
+            // sign: '_',
+        },
+        computed: {
+            calculateAge() { // Not use
+                this.dob = document.getElementById('dob').value;
+                var dt = new Date(this.dob);
+
+                const today = new Date();
+
+                let diff = today.getTime() - dt.getTime();
+
+                var elapsed = new Date(diff);
+                var year = elapsed.getYear(); // -70
+                var month = elapsed.getMonth();
+                var day = elapsed.getDay();
+
+                let ageYear = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
+                let ageMonth = Math.round(month);
+
+                let ageDay = Math.round(day);
+
+                var newAge = ageYear + ' Years, ' + ageMonth + ' Months, ' + ageDay + ' Days'
+
+                console.log("ageYear==::" + ageYear + ', ageMonth==:: ' + ageMonth + ', ageDay==:: ' + ageDay + " age:=: " + age)
+                return newAge;
+            },
+            getAge() { // Get Age in years,months and days
+                this.dob = document.getElementById('dob').value;
+
+                var newDate = new Date(this.dob);
+                var now = new Date();
+                var today = new Date(now.getYear(), now.getMonth(), now.getDate());
+
+                var yearNow = now.getYear();
+                var monthNow = now.getMonth();
+                var dateNow = now.getDate();
+
+                var dd = ('0' + newDate.getDate()).slice(-2);
+                var mm = ('0' + (newDate.getMonth() + 1)).slice(-2);
+                var y = newDate.getFullYear();
+
+                var formattedDate = y + '-' + mm + '-' + dd;
+                var dob = new Date(formattedDate);
+
+                var yearDob = dob.getYear();
+                var monthDob = dob.getMonth();
+                var dateDob = dob.getDate();
+                var age = {};
+                var ageString = "";
+                var yearString = "";
+                var monthString = "";
+                var dayString = "";
+
+                yearAge = yearNow - yearDob;
+
+                if (monthNow >= monthDob)
+                    var monthAge = monthNow - monthDob;
+                else {
+                    yearAge--;
+                    var monthAge = 12 + monthNow - monthDob;
+                }
+
+                if (dateNow >= dateDob)
+                    var dateAge = dateNow - dateDob;
+                else {
+                    monthAge--;
+                    var dateAge = 31 + dateNow - dateDob;
+
+                    if (monthAge < 0) {
+                        monthAge = 11;
+                        yearAge--;
+                    }
+                }
+
+                age = {
+                    years: yearAge,
+                    months: monthAge,
+                    days: dateAge
+                };
+
+                if (age.years > 1) yearString = " years";
+                else yearString = " year";
+                if (age.months > 1) monthString = " months";
+                else monthString = " month";
+                if (age.days > 1) dayString = " days";
+                else dayString = " day";
+
+                if ((age.years > 0) && (age.months > 0) && (age.days > 0))
+                    ageString = age.years + yearString + ", " + age.months + monthString + ", and " + age.days + dayString + " old.";
+                else if ((age.years == 0) && (age.months == 0) && (age.days > 0))
+                    ageString = "Only " + age.days + dayString + " old!";
+                else if ((age.years > 0) && (age.months == 0) && (age.days == 0))
+                    ageString = age.years + yearString + " old. Happy Birthday!!";
+                else if ((age.years > 0) && (age.months > 0) && (age.days == 0))
+                    ageString = age.years + yearString + " and " + age.months + monthString + " old.";
+                else if ((age.years == 0) && (age.months > 0) && (age.days > 0))
+                    ageString = age.months + monthString + " and " + age.days + dayString + " old.";
+                else if ((age.years > 0) && (age.months == 0) && (age.days > 0))
+                    ageString = age.years + yearString + " and " + age.days + dayString + " old.";
+                else if ((age.years == 0) && (age.months > 0) && (age.days == 0))
+                    ageString = age.months + monthString + " old.";
+                else ageString = "Oops! Could not calculate age!";
+
+                // console.log('yearAge=:'+yearAge,
+                // 'monthDob=:'+monthDob,'dateDob=:'+dateDob, 'ageString=:'+ageString)
+
+                return ageString;
+            },
+            cardValue() {
+                this.cardid = document.getElementById('cardid').value;
+                return this.cardid;
+            },
+            // barcodeChanged() {
+            //     this.barcode = this.id + this.sign + this.dob + this.sign; //+ this.cardid;
+            //     return this.barcode;
+            // },
+            // urlChanged() {
+            //     this.barurl = this.url + this.id + this.sign + this.dob + this.sign + this.cardid;
+            //     return this.barurl;
+            // },
+        }
+    })
+</script>
+
+{% endblock %}

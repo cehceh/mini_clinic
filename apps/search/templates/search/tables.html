@@ -1,0 +1,337 @@
+{% extends 'index.html' %} 
+{% load static %} 
+{% load render_table from django_tables2 %} 
+
+
+{% block content %}
+<!--  -->
+{% url 'clinic:calculate_day_income' as day_url %}
+<!--  -->
+{% url 'clinic:calculate_month_income' as month_url %}
+<!--  -->
+{% url 'clinic:calculate_year_income' as year_url %}
+<!--  -->
+{% url 'clinic:search_only' as only_date_url %}
+<!--  -->
+{% url 'clinic:table_visits' as table_visits_url %}
+<!--  -->
+
+<!--  -->
+{% if table_patient or table_patient_search %}
+
+<!-- Hidden Done -->
+<div class="align-content-center mr-sm-2" style="background-color:transparent; height: 100%; width: 100%; display: inline-block; position:relative; margin: 30px;padding: 15px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="search-div" hidden>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_patient' %}">
+
+        <input class="form-control mr-sm-2" type="text" name='ph' placeholder="Phone & Mobile..." value="{{request.GET.ph}}" aria-label="Search">
+        <input class="form-control mr-sm-2" type="text" name='card' placeholder="Card ID..." value="{{request.GET.card}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="{% url 'search:search_patient' %}">
+        <input class="form-control mr-sm-2" type="text" name='pid' placeholder="Patient ID..." value="{{request.GET.pid}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</div>
+
+
+<!-- Hidden Done -->
+{% elif request.path == day_url or request.path == month_url or request.path == year_url or request.path == only_date_url %}
+<div class="container-fluid" style="background-color:transparent; height: 100%; width: 100%; 
+    margin: 30px; display: inline-block; position:relative; padding: 15px;
+    border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="search-div" hidden>
+    <div class="align-content-center float-right">
+        <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_only' %}">
+
+            <input class="form-control mr-sm-2" type="text" name='day' placeholder="Search Day..." value="{{request.GET.day}}" aria-label="Search">
+            <input class="form-control mr-sm-2" type="text" name='month' placeholder="Search Month..." value="{{request.GET.month}}" aria-label="Search">
+            <input class="form-control mr-sm-2" type="text" name='year' placeholder="Search Year..." value="{{request.GET.year}}" aria-label="Search">
+            <!--  -->
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            <!--  -->
+        </form>
+    </div>
+    <!-- <br><br><br> -->
+    <div class="align-content-center float-left">
+        <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="{% url 'search:search_date' %}">
+
+            <input class="form-control mr-sm-2" type="text" name='from' placeholder="Search Date from ..." value="{{request.GET.from}}" aria-label="Search">
+            <input class="form-control mr-sm-2" type="text" name='to' placeholder="Search Date to ..." value="{{request.GET.to}}" aria-label="Search">
+            
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            
+        </form>
+    </div>
+</div>
+{% endif %}
+<!--  -->
+<!-- <div class="align-content-center" style="background-color:white; height: 100%; width: 100%; 
+display: inline-block; position:relative; margin: 30px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+    <!--  -->
+    {% if table_patient %} 
+            <p class="float-left">
+                <h1><strong>All Patinets Data</strong></h1>
+            </p>
+            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'patientdata:table_patient' %}">
+
+                <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here.." value="{{request.GET.pageno}}" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+                
+            </form>
+            <br><br>
+        {% render_table table_patient %}
+    <!--  -->
+    {% elif table_patient_search %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; 
+        margin: 30px; padding: 10px; display: inline-block; position:relative; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+        <p class="float-left">
+            <h1><strong>Search Patinet Data</strong></h1>
+        </p>
+        <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_patient' %}">
+
+            <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here" value="{{request.GET.pageno}}" aria-label="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+            
+        </form><br>
+        {% render_table table_patient_search %}
+        <!-- </div> -->
+    <!--  -->
+    {% elif present_hist_table %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; 
+        display: inline-block; position:relative; margin: 30px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>Updating Present History Table</strong></h1>
+            </p>
+            <hr>
+            <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'presenthistory:table_present_hist' %}">
+    
+                <input class="form-control mr-sm-2" type="text" name='pageno' placeholder="Edit pagination pages here" value="{{request.GET.pageno}}" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+                
+            </form><br><br>
+            {% render_table present_hist_table %}
+        <!-- </div> -->
+    <!--  -->
+    {% elif table_search %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; 
+        display: inline-block; position:relative; margin: 30px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>Search Data</strong></h1>
+            </p>
+            <!-- <a class="btn btn-secondary float-right" href="#" type="button">Button</a> -->
+            <br><br>
+            {% render_table table_search %}
+        </div>
+    <!--  -->
+    {% elif table_medicine %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; 
+        display: inline-block; position:relative; margin: 30px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <!-- <p class="float-left">
+                <h1><strong></strong></h1>
+            </p>
+            <a class="btn btn-secondary float-right" href="#" type="button">Button</a>
+            <br><br> -->
+            {% render_table table_medicine %}
+        <!-- </div> -->
+    <!--  -->
+    {% elif date_table_search %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; 
+        display: inline-block; position:relative; margin: 30px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>Date Search Data</strong></h1>
+            </p>
+            <a class="btn btn-secondary float-right" href="#" type="button">Button</a>
+            <br><br>
+            {% render_table date_table_search %}
+        <!-- </div> -->
+        <!--  -->
+    {% elif only_table_search %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; 
+        display: inline-block; position:relative; margin: 30px; padding: 20px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" name="mydiv" id="only-table-div"> -->
+            
+            <p class="float-left">
+                <h1><strong>
+                    Search Data of year [[ year ]] [[month]] [[day]]
+                </strong></h1>
+                <!-- <h1><strong v-else-if="month == True && year == True && day == False">
+                    Search Data of year [[ year ]] and month [[ month ]]
+                </strong></h1>
+                <h1><strong v-else-if="day == True && month == True && year == True">
+                    Search Data of year [[ year ]] and month [[ month ]] and day [[ day ]]
+                </strong></h1>
+                <h1><strong v-esle>Search Data</strong></h1> -->
+            </p>
+            <!-- <a class="btn btn-secondary float-right" href="#" type="button">Button</a> -->
+            <br><br>
+            {% render_table only_table_search %}
+        <!-- </div> -->
+    <!--  -->
+    {% elif export_table %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; 
+        display: inline-block; position:relative; margin: 30px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>All Visits Data</strong></h1>
+            </p>
+            <!-- <a class="btn btn-secondary float-right" href="#" type="button">Button</a> -->
+            <br><br>
+            {% render_table export_table %}
+        <!-- </div> -->
+
+    {% elif request.path == year_url %} 
+    <!-- <div class="align-content-center" style="background-color:white; height: 100%; width: 100%; margin: 30px;
+        display: inline-block; position:relative; padding: 10px; border-style: outset; border-radius: 20px; 
+        border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+        <p class="float-left">
+            <h1><strong>Yearly Report</strong></h1>
+        </p>
+        <!-- <a class="btn btn-secondary float-right" href="#" type="button">Button</a> -->
+        <br><br>
+        {% render_table year_table %}
+    <!-- </div> -->
+    {% elif request.path == day_url %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; margin: 30px;
+            display: inline-block; position:relative; padding: 10px; border-style: outset; border-radius: 20px; 
+            border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>Daily Report</strong></h1>
+            </p>
+            <!-- <a class="btn btn-secondary float-right" href="#" type="button">Button</a> -->
+            <br><br>
+            {% render_table day_table %}
+        <!-- </div> -->
+    {% elif request.path == month_url %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; margin: 30px;
+        display: inline-block; position:relative; padding: 10px; border-style: outset; border-radius: 20px;
+         border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>Monthly Report</strong></h1>
+            </p>
+            <a class="btn btn-secondary float-right" href="#" type="button">Button</a>
+            <br><br>
+            {% render_table month_table %}
+        <!-- </div> -->
+
+    {% elif income_table %} 
+        <!-- <div class="align-content-center printFrame" style="background-color:white; height: 100%; width: 100%; margin: 30px;
+            display: inline-block; position:relative; padding: 10px; border-style: outset; 
+            border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="income-div"> -->
+                <p class="float-left">
+                    <h1><strong>Income Report</strong></h1>
+                </p>
+                <a class="btn btn-secondary float-right" href="#" type="button">Button</a>
+                <br><br>
+            {% render_table income_table %}
+ 
+    {% elif request.path == table_visits_url %} 
+        <!-- <div class="align-content-center" style="background-color:white; height: 100%; width: 100%; margin: 30px;
+        display: inline-block; position:relative; padding: 10px; border-style: outset; border-radius: 20px; 
+        border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>All Visits Data</strong></h1>
+            </p><hr>
+            <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'visits:table_visits' %}">
+                <input class="form-control mr-sm-2" type="text" name='pageno' placeholder="Edit pagination pages here..." value="{{request.GET.pageno}}" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+            </form><br><br>
+            <!-- <a class="btn btn-secondary float-left" href="#" type="button">Button</a> -->
+            
+
+            {% render_table visits_table %}
+        <!-- </div> -->
+    {% elif revisits_table %}
+    <!-- <div class="align-content-center" style="background-color:white; height: 100%; width: 100%; margin: 30px;
+        display: inline-block; position:relative; padding: 10px; border-style: outset; border-radius: 20px; 
+        border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>All Revisits Data</strong></h1>
+            </p>
+            <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'revisits:table_revisit' %}">
+                <input class="form-control mr-sm-2" type="text" name='pageno' placeholder="Edit pagination pages here..." value="{{request.GET.pageno}}" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+            </form>
+            <!-- <a class="btn btn-secondary float-right" href="#" type="button">Button</a> -->
+            <br><br>
+        {% render_table revisits_table %}
+    <!-- </div> -->
+    {% elif view_revisits_table %}
+    <!-- <div class="align-content-center" style="background-color:white; height: 100%; width: 100%; margin: 30px;
+        display: inline-block; position:relative; padding: 10px; border-style: outset; border-radius: 20px; 
+        border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="tables-div" name="mydiv"> -->
+            <p class="float-left">
+                <h1><strong>All Revisits For Visit No. ({{visit}})</strong></h1>
+            </p>
+            <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'revisits:view_revisit' visit.id patient.id %}">
+                <input class="form-control mr-sm-2" type="text" name='pageno' placeholder="Edit pagination pages here..." value="{{request.GET.pageno}}" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+            </form>
+            <!-- <a class="btn btn-secondary float-right" href="#" type="button">Button</a> -->
+            <br><br>
+        {% render_table view_revisits_table %}
+    <!-- </div> -->
+    {% endif %}
+<!-- </div> -->
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<!-- <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script> -->
+ <!-- Write javascript code Here -->
+    <script type="text/javascript">    
+        $(document).ready(function() {
+            // $('#, #').datepicker({
+            //     dateFormat: "yy-mm-dd"
+            // });
+
+            // $('#birth-date').on('change', function() {
+            //     var dob = new Date($('#birth-date').val());
+            //     var today = new Date();
+            //     var age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000)); // $('#age').val(age); // });
+            //     $('#age').val(age);
+            // });
+        })
+    </script>
+    <!-- <script type="text/javascript" src="{% static 'js/vue.js' %}"></script> -->
+    <!-- <script type="text/javascript" src="{% static 'js/axios.min.js' %}"></script> -->
+    <script>
+        var editPasthist = new Vue ({
+            // el: '#edit-pasthist',
+            // delimiters: ['[[', ']]'],
+            // data: {
+            //         title: "Edit Past History",
+            //         message: 'Code with amr',
+            //         showDialog: false,
+            //         category_id: 0,
+            // },
+            methods: {
+                // toggleDialog (id) {
+                //     this.category_id = id
+                //     this.showDialog = true
+                // }
+            }
+        });
+        // new instance of Vue.js
+        var savePasthist = new Vue({
+            // el: '',
+            // delimiters: ['[[', ']]'],
+            // data: {
+            //     title: "Add Past History",
+            // }
+        });
+        // new instance of Vue.js
+        var incomeDiv = new Vue({
+            // el: '#only-table-div',
+            // delimiters: ['[[', ']]'],
+            // data: {
+            //     day: '{{search_day}}',
+            //     month: '{{search_month}} / ',
+            //     year: '{{search_year}} / ',
+            // }
+        });
+    </script>
+
+{% endblock  %}

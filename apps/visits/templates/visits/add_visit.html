@@ -1,0 +1,67 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load render_table from django_tables2 %} {% load static %}
+<!--  -->
+{% block content %}
+
+<!-- <div style="background-color: pink;">
+    {{save_visits_form.non_field_errors}}
+</div> -->
+
+
+<!-- <div class="align-content-center" style="background-color:transparent; width: 1300px; height: 900px; margin: 20px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey; display: grid;" id="save-visits-div"> -->
+<h1 style="color: black;"><strong>Add New Visit for Patient({{patient}}) </strong></h1>
+<hr>
+<!-- <div class="float-right" style="background-color: transparent; width: 500px; height: 50px;">
+
+    <form class="form-inline mt-2 mt-md-0" method="GET" action="#">
+
+        <input class="form-control mr-sm-2" type="text" name='vis' placeholder="Search Visits ID..." value="{{request.GET.vis}}" aria-label="Search">
+        
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        
+    </form>
+    
+</div> -->
+
+<div class="" style="background-color: transparent; width: 500px; height: 50px;">
+    <!--  -->
+    <a type="button" class="btn btn-outline-dark" href="{% url 'visits:pass_patient_id' patient.id %}" type="button">
+        Add New Visit
+    </a>
+    <a type="button" class="btn btn-outline-primary" href="{{ patient.edit_patient_url }}" type="button">
+        Edit Patient Data
+    </a> {% if match_pasthist %}
+    <a type="button" class="btn btn-outline-dark btn-rounded waves-effect" href="{% url 'pasthistory:save_pasthist' patient.id %}">
+            Add Past History
+        </a> {% else %}
+    <a type="button" class="btn btn-outline-danger btn-rounded waves-effect" href="{% url 'pasthistory:save_pasthist' patient.id %}">
+        Add Past History
+    </a> {% endif %}
+
+</div>
+
+<form method="post">{% csrf_token %}
+    <!--  -->
+    <div class="float-left" style="width:45%; height: 100%;" id="left">
+        <!--  -->
+        <hr>
+        <!--  -->
+        <div style="background-color: pink;">
+            {{save_visits_form.non_field_errors}}
+        </div>
+
+        <!-- {{save_visits_form.id.label_tag}} {{save_visits_form.id}} <br>
+        {{save_visits_form.patient.label_tag}} {{bound_form.patient}}<br>
+         -->
+        {{save_visits_form.visitdate.label_tag}} {{save_visits_form.visitdate}} <br> {{save_visits_form.complain.label_tag}} {{save_visits_form.complain}} <br> {{save_visits_form.amount.label_tag}} {{save_visits_form.amount}}
+        <hr>
+        <button type="submit" class="btn btn-outline-dark" id="vis-form-btn">Save</button>
+
+    </div>
+    <div class="float-right" style="width:45%; height: 100%;" id="right">
+        <hr> {{save_visits_form.diagnosis.label_tag}} {{save_visits_form.diagnosis}} <br> {{save_visits_form.sign.label_tag}} {{save_visits_form.sign}} <br /> {{save_visits_form.intervention.label_tag}} {{save_visits_form.intervention}}
+        <hr>
+    </div>
+</form>
+<!-- </div> -->
+
+{% endblock %}

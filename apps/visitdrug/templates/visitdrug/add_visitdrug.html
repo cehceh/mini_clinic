@@ -1,0 +1,243 @@
+{% extends 'index.html' %} 
+{% load crispy_forms_tags %} 
+{% load render_table from django_tables2 %}
+{% load widget_tweaks %}
+{% load static %}
+<!--  -->
+{% block content %}
+<div class="container" id="add-drug">
+
+{% if match_visit %} {% else %}
+    <!-- for empty prescription -->
+    <div class="alert {{ message.tags }} alert-dismissible fade show" style="background-color: lightpink; width: 98%; height: 100%; margin: 10px; padding: 15px;" role="alert">
+        <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+            Please add drugs to this prescription
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: black; margin: 5px; padding: 5px;">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </li>
+    </div>
+{% endif %}
+    <br>
+
+    <div class="float-left" style="width: 50%; height: 100%;">
+        <h1 style="color: black;">
+            <strong>Add Prescription</strong>
+        </h1>
+
+        <p>
+            <strong style="color: black;">
+                Visit Date : {{visit.visitdate}}
+                <!-- <input type="text" :value="formatDate" id="visdate" disabled> 
+                <p id="vis">{{visit.visitdate}}</p> -->
+            </strong>
+        </p> <br>
+        <!-- <br><br><br> -->
+    </div>
+    <div class="float-right" style="width: 50%; height: 100%;" id="img">
+        {% if patient.barimg %}
+            <!-- <br><br><br><br><br> -->
+            
+            <a href="{% url 'patientdata:patient_details' patient.barcode %}">
+                <img class="image" src="{{ patient.barimg.url }}" style="width: 20%; height: 15%;"> 
+            </a>&nbsp;&nbsp;&nbsp;&nbsp;
+            
+            <br>
+        {% endif %}
+    </div>
+
+    <div class="container float-left" style="width: 100%; height: 100%;">
+
+        <!-- <input type="text" value="{{vis_date}}" name="vis-date" id="vis-date"> -->
+        <!-- <a class="btn btn-outline-dark" href="{% url 'visitdrug:save_medicine' patid visid %}" role="button">
+            Add New Prescription
+        </a> -->
+        <a class="btn btn-outline-dark" href="{% url 'visits:pass_patient_id' patid %}" role="button" id="new-visit">
+            New Visit
+        </a>
+        <a class="btn btn-outline-primary" href="{% url 'patientdata:edit_patient' patient.id %}" role="button" id="edit-patient">
+            Edit Patient
+        </a>
+        <a class="btn btn-outline-primary" href="{% url 'visits:visits_patient_id' visit.id patid %}" role="button">
+            Edit This Visit
+        </a>
+        <!--  -->
+        {% if match_visit %}
+        <a class="btn btn-outline-success" href="{% url 'visitdrug:print_html' visit.id %}" role="button">
+            Print Perview
+            </a>
+        <!--  -->
+        {% else %}
+        <!--  -->
+        <a class="btn btn-outline-primary float-right" href="#add_drugs_to_prescription" role="button">
+                Please Add Drugs 
+            </a>
+        <!--  -->
+        {% endif %}
+       
+        <br><br>
+        <hr>
+    </div>
+   
+
+    <form method="post">{% csrf_token %}
+        <!--  -->
+        <div class="float-left" style="width: 30%;height: 100%;">
+            <br>
+            <!-- <hr> -->
+            <!-- id="left-save-drug-div" -->
+            <div style="background-color: pink;">
+                {{save_medicine_form.non_field_errors}}
+            </div>
+            <!--  -->
+            <!-- {{ save_medicine_form.presc.label_tag }} 
+            {{ visit_form.presc }} <br> -->
+            <!--  -->
+            {{ save_medicine_form.name.label_tag }} 
+            {% render_field save_medicine_form.name v-model="this.name" v-on::change="changeLanguage" %} 
+            <br> 
+
+            {{ save_medicine_form.plan.label_tag }} 
+            {% render_field save_medicine_form.plan %} <br>
+            
+            <!-- {{ save_medicine_form.patient.label_tag }} 
+            {{ visit_form.patient }} <br>
+            
+            {{ save_medicine_form.visit.label_tag }}
+            {{ visit_form.visit }} <br> -->
+
+            <button type="submit" class="btn btn-outline-danger" id="save_medicine_form-btn">Add Drug</button>
+            <!-- <input type="submit" class="btn btn-outline-danger" id="save_medicine_form-btn" value="Add Drug"> -->
+            <hr>
+        </div>
+        <br>
+        <div class="float-right" style="width: 65%; height: 100%; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+            <br>
+            <!-- id="drug-table-div" -->
+            {% render_table drug_table %}
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+<!--  -->
+{% block scripts %}
+    <script>
+        var addDrug = new Vue ({
+        el: '#add-drug', 
+        delimiters: ['[[', ']]'],
+        data: {
+            plan: '',
+            name:'',
+            visdate:'{{ visit.visitdate }}',
+        },
+        computed : {
+            changeLanguage: function(){
+                this.plan = navigator.language;// 
+                console.log('plan-changes=' + this.plane);
+                return this.plan;
+            },
+            formatDate(){
+                //this.visdate // = '{{ vis_date }}';
+                
+                // var vis = document.getElementById('vis').value;
+                // var vis = document.getElementById('vis').innerText;
+                var newVis = String(this.visdate);
+                // var newVis = String(vis);
+                // var dt = new Date(this.visdate);
+                var dt = new Date(newVis);
+                var newDate = new Date(dt);
+                newDate.setDate(newDate.getDate());
+                // vis.setDate(vis.getDate());
+                // var d = vis.getDate();
+                // var d = (newDate.getFullYear());
+                var dd = ('0' + newDate.getDate()).slice(-2);
+                var mm = ('0' + (newDate.getMonth()+1)).slice(-2);
+                var y = newDate.getFullYear();
+                var formattedDate = dd + '/' + mm + '/' + y;
+
+                console.log('vis=:',vis)
+                console.log('newDate=',newDate,'&&','dt=:',dt)
+                console.log(dd,mm,y)
+                console.log(formattedDate)
+                return formattedDate;
+            }
+        },
+    })
+    </script>
+    <script type="text/javascript">
+        // $('#birth-date, #visitdate').datepicker({
+        //     dateFormat: "yy-mm-dd",
+        // });
+        // $('#birth-date').on('change', function() {
+        //     var dob = new Date($('#birth-date').val());
+        //     var today = new Date();
+        //     var age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000)); // $('#age').val(age); // });
+        //     $('#age').val(age);
+        // });
+
+        $('#plan').bind('input propertychange', function(ev) {
+            var text = ev.target.value;
+            if (arabicPattern.test(text)) {
+                // arabic;
+                $('#plan').css('direction', 'rtl')
+            }
+        });
+        //
+        $(document).on('focus', '.plan', function() {
+            $('#plan').attr('lang', 'arabisk');
+        });
+        $(document).on('outfocus', '.plan', function() {
+            $('#plan').attr('lang', 'eng');
+        });
+
+        // for open popup window
+        // function overlay() {
+        //     el = document.getElementById("overlay");
+        //     el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        // }
+        /// 
+        // function printDiv() {
+        //     //
+        //     var divToPrint = document.getElementById("medicine-table");
+        //     var newWin = window.open('', 'Print-Window');
+        //     newWin.document.write(divToPrint.innerHTML);
+        //     newWin.print();
+        //     newWin.close();
+        //
+        // var divToPrint = document.getElementById('medicine-table');
+        // var newWin = window.open('', 'Print-Window');
+        // newWin.document.open();
+        // newWin.document.write('<html > <body onload = "window.print()"> ' + divToPrint.innerHTML + '</body></html>');
+
+        // newWin.document.close();
+        // setTimeout(function() {
+        //     newWin.close();
+        // }, 10);
+        // }
+        // $('#btn-print').on('click', function() {
+        //         printDiv();
+        //     })
+        // $(document).ready(function() {
+        //     $('#btn').on('click', function() {
+        //         $('#medicine-table').tableExport({
+        //             type: 'pdf',
+        //             // escape: 'false',
+        //             separator: ',',
+        //             ignoreColumn: [2, 3],
+        //             // tableName: 'yourTableName',
+        //             // type: 'csv',
+        //             pdfFontSize: 14,
+        //             pdfLeftMargin: 20,
+        //             escape: 'true',
+        //             htmlContent: 'false',
+        //             consoleLog: 'false',
+        //         })
+        //     })
+        // });
+    </script>
+    
+{% endblock %}

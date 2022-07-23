@@ -1,0 +1,16 @@
+{% load render_table from django_tables2 %}{% load bootstrap4 %}
+<!-- {% load querystring from django_tables2 %} -->
+<!--  -->
+<!-- {% for format in table.export_formats %}
+<a href="{% querystring '_export'=format %}">
+    download <code>.{{ format }}</code>
+</a>
+{% endfor %} -->
+
+<!--  -->
+<div class="align-content-center" style="background-color:transparent; margin: 20px; padding: 10px; border-style: outset; border-radius: 20px; width: 1200px; height: 100px;
+  border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="">
+
+    {% render_table raw_table %}
+
+</div>

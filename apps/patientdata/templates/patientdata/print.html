@@ -1,0 +1,107 @@
+<!-- # -*- coding: utf-8 -*- -->
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load render_table from django_tables2 %} {% load bootstrap4 %} {% load querystring from django_tables2 %} {% load static %}
+<!--  -->
+{% block content %}
+
+<!-- <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
+<!-- <!DOCTYPE html>
+<html dir="auto" lang="ar"> -->
+<!-- <html xmlns="" xml:lang="ar" lang="ar" dir="rtl"> -->
+<!-- dir="rtl" http://www.w3.org/1999/xhtml -->
+
+
+<div class="align-content-center" style="background-color:transparent; margin: 20px; padding: 10px; border-style: outset; border-radius: 20px; width: 100%; height: 100%;
+    border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+
+    <!-- <div class="center-align float-left" style="margin: 5px; padding: 10px;"> -->
+        <a type="button" class="btn btn-outline-primary" href="{% url 'clinic:save_medicine' name.id visit_no.id %}">
+            Back To Prescription
+        </a>
+        <button class="btn btn-outline-primary" id="print" onclick="printData()">
+        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -->
+        Print Prescription 
+        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+        </button>
+    <!-- </div> -->
+    <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+    <!-- <div class="alert {{ message.tags }} alert-dismissible fade show" style="background-color: lightcyan; width: 70%; height: 100%; margin: 10px; padding: 15px;" role="alert">
+        <h6><p>Hint: The prescription has to print on a doctor's real prescription paper that is already exsits on your clinic</p></h6>
+    </div> -->
+</div>
+
+
+<div class="align-content-center" style="background-color:white; width: 100%; height: 100%;border-style: outset; border-radius: 20px; margin: 20px; padding: 10px;
+  border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+    <!-- <br><br><br><br><br><br><br><br><br><br> -->
+    <!--  -->
+    <span class="" id="p">
+    <br><br><br><br><br><h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Visit No: {{ visit_no }} <br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;Visit Date: {{ date }} <br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;Name: {{ name }}</h4>
+    </span>
+    <!--  -->
+    <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="padding-right: 10px;" id="r">
+        <h4>R\</h4>
+    </span> -->
+    <div class="align-content-center" style="margin: 20px; padding: 10px;" id="pdata">
+        <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R\
+        </h4>
+        {% if match_patient %}
+        <!--  -->
+        {% for cl in qs %}
+        <!--  -->
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="padding-left: 10px;">{{cl.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="margin-right: 40px;">{{cl.plan}}</span><br><br> {% endfor %}
+        <!--  -->
+        {% else %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" style="background-color: lightpink; width: 1200px; height: 50px; margin: 10px; padding: 15px;" role="alert">
+            <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: black; margin: 5px; padding: 5px;">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </li>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+    <!-- <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script> -->
+<script type="text/javascript">
+    function printData() {
+        var spanToPrint = document.getElementById("p");
+        // var rToPrint = document.getElementById("r");
+        var divToPrint = document.getElementById("pdata");
+        newWin = window.open("");
+        newWin.document.write(spanToPrint.innerHTML + divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+
+    // $('#print').onclick(function() {
+    // var spanToPrint = document.getElementById("p");
+    // // var rToPrint = document.getElementById("r");
+    // var divToPrint = document.getElementById("pdata");
+    // newWin = window.open("");
+    // newWin.document.write(spanToPrint.innerHTML + divToPrint.outerHTML);
+    // newWin.print();
+    // newWin.close();
+
+    // $alert('print process will start');
+    // printData();
+    // $console.log('what is happen');
+    // })
+</script>
+{% endblock  %}
+    

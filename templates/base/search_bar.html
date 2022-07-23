@@ -1,0 +1,129 @@
+{% load i18n %} {% load static %} {% if request.path == 'dashboard' %} {% else %}
+
+<div class="align-content-center" style="background-color:transparent; position: relative; display: inline-block; width: 100%; height: 100%; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey; margin: 20px; padding: 20px;"
+    id="searchreport-div">
+    {% if request.path == day_url or request.path == month_url or request.path == year_url or request.path == only_date_url %}
+
+    <!-- <div class="align-content-center float-right"> -->
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_only' %}">
+        <!-- {% url 'search:search_only' %} -->
+        <input class="form-control mr-sm-2" type="text" name='day' placeholder="Search Day..." value="{{request.GET.day}}" aria-label="Search" v-model="day">
+        <input class="form-control mr-sm-2" type="text" name='month' placeholder="Search Month..." value="{{request.GET.month}}" aria-label="Search" v-model="month">
+        <input class="form-control mr-sm-2" type="text" name='year' placeholder="Search Year..." value="{{request.GET.year}}" aria-label="Search" v-model="year">
+        <!--  -->
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+        <!--  -->
+    </form>
+    <!-- </div> -->
+    <!-- <br><br><br> -->
+    <!-- <div class="align-content-center float-left"> -->
+    <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="{% url 'search:search_date' %}">
+
+        <input class="form-control mr-sm-2" type="text" name='from' placeholder="Search Date from ..." value="{{request.GET.from}}" aria-label="Search">
+        <input class="form-control mr-sm-2" type="text" name='to' placeholder="Search Date to ..." value="{{request.GET.to}}" aria-label="Search">
+        <!--  -->
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+        <!--  -->
+    </form>
+    <!-- </div> -->
+    {% elif edit_booking_form %}
+    <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="{% url 'booking:table_book' %}">
+
+        <input class="form-control mr-sm-2" type="text" name='d' placeholder="Search Booking Date(y-m-d)..." value="{{request.GET.d}}" aria-label="Search" id="search-book" v-model="date">
+        <!--  -->
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+        <!--  -->
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'booking:edit_book' qs.id %}">
+
+        <input class="form-control mr-sm-2" type="text" name='pat' placeholder="Search Patients Name ..." value="{{request.GET.pat}}" aria-label="Search">
+
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    </form>
+    {% elif request.path == bookingtable_url or current_date_table or book_date_table or book_table %}
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'booking:table_book' %}">
+        <input class="form-control mr-sm-2" type="date" name='d' placeholder="Search Booking Date..." value="{{request.GET.d}}" aria-label="Search" id="search-book">
+
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="{% url 'booking:table_book' %}">
+        <input class="form-control mr-sm-2" type="text" name='p' placeholder="Search Patient Name ..." value="{{request.GET.p}}" aria-label="Search">
+
+        <input class="form-control mr-sm-2" type="date" name='pd' placeholder="Search patient date..." value="{{request.GET.pd}}" aria-label="Search">
+
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search Patient</button>
+    </form>
+    {% elif request.path == '/booking/create/booking/date/' %}
+    <form class="form-inline mt-2 mt-md-0 float-right" method="GET" action="{% url 'booking:table_book' %}">
+
+        <input class="form-control mr-sm-2" type="date" name='d' placeholder="Search Booking Date..." value="{{request.GET.d}}" aria-label="Search" id="search-book" v-model="date">
+
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'booking:save_book'  %}">
+
+        <input class="form-control mr-sm-2" type="text" name='pat' placeholder="Search Patients Name ..." value="{{request.GET.pat}}" aria-label="Search">
+
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+
+    </form>
+    {% else %}
+    <!-- table_patient or table_patient_search -->
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_patient' %}">
+
+        <input class="form-control mr-sm-2" type="text" name='ph' placeholder="Search Phone & Mobile..." value="{{request.GET.ph}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_patient' %}">
+        <input class="form-control mr-sm-2" type="text" name='card' placeholder="Search Card ID..." value="{{request.GET.card}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_patient' %}">
+        <input class="form-control mr-sm-2" type="text" name='q' placeholder="Search Name & Address..." value="{{request.GET.q}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_patient' %}">
+        <input class="form-control mr-sm-2" type="number" name='pid' placeholder="Search Patient ID..." value="{{request.GET.pid}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    </form>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'search:search_visit' %}">
+
+        <input class="form-control mr-sm-2" type="number" name='vis' placeholder="Search Visits No..." value="{{request.GET.vis}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+    </form>
+
+    {% endif %}
+</div>
+{% endif %} {% block scripts %}
+<script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+
+<!-- <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script> -->
+<!-- <script type="text/javascript" src="{% static 'js/bootstrap4.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.js' %}"></script> -->
+
+<script type="text/javascript" src="{% static 'js/vue.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/axios.min.js' %}"></script>
+
+<script type="text/javascript">
+    // $(document).ready(function() {
+    //     $('#search-book').datepicker({
+    //         dateformat: "yy-mm-dd",
+    //     });
+    // })
+</script>
+<script>
+    var reportSearch = new Vue({
+        el: '#searchreport-div',
+        delimiters: ['[[', ']]'],
+        data: {
+            year: '',
+            month: '',
+            day: '',
+        },
+    })
+</script>
+{% endblock %}

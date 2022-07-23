@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+{% load i18n %}
+
+{% block content %}
+    
+<section class="hero is-medium is-info is-bold">
+    
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">{% trans 'Wellcome To Our Clinic Application' %}</h1> <br>
+            
+                <h2 class="subtitle">{% trans 'We are happy to be with us in our clinic app. go to your' %}
+                    <a href="dashboard"> {% trans ' Dashboard' %}</a>
+                </h2>
+            
+                <!-- <h2 class="subtitle">
+                    {% trans 'We will be happy if you join Our Clinic, Try to' %} 
+                    <a href="#"><strong>{% trans 'Sign up' %}</strong></a>{% trans 'now' %}  
+                </h2> -->
+           
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
+    

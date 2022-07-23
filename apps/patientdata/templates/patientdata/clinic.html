@@ -1,0 +1,111 @@
+{% extends 'index.html' %} {% load static %} {% load render_table from django_tables2 %} {% load crispy_forms_tags %} {% load export_url from django_tables2 %}
+<!--  -->
+
+{% block content %}
+<!--  -->
+
+
+
+{% if save_medicine_form %}
+<!--  -->
+<!-- {% if match_visit %} -->
+<!--  -->
+<!-- {% else %} -->
+<!-- <div style="background-color: pink;"> -->
+<!-- {{save_medicine_form.non_field_errors}} -->
+<!--</div> -->
+<!-- {% endif %} -->
+{% if match_visit %} {% else %}
+<!-- for empty prescription -->
+<div class="alert {{ message.tags }} alert-dismissible fade show" style="background-color: lightpink; width: 1200px; height: 50px; margin: 10px; padding: 15px;" role="alert">
+    <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+        Please add drugs to this prescription
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: black; margin: 5px; padding: 5px;">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </li>
+</div>
+{% endif %}
+
+<!-- position:absolute; top:250px; left:-175px; -->
+<div class="align-content-center" style="background-color:transparent; width:1250px; height:700px; margin: 20px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+    <!-- id="save-drug-div" -->
+
+    <div class="float-left" style="background-color: transparent; width: 500px; height: 50px;">
+        <h1 style="color: black;"><strong>Prescription</strong></h1>
+        <!-- <input class="float-right" type="text" name="pages" id="pages"> -->
+        <p>
+            <h3 style="color: black;">Visit Date : {{ vis_date }}</h3>
+        </p>
+        <br><br><br>
+
+    </div>
+    <div class="float-right" style="background-color: transparent; width: 600px; height: 50px;">
+        <!-- <input type="text" value="{{vis_date}}" name="vis-date" id="vis-date"> -->
+        <a class="btn btn-outline-primary" href="/clinic/add/prescription/patient/{{ patid }}/visit/{{ visid }}/" role="button">
+            Add New Prescription
+        </a>
+        <a class="btn btn-secondary" href="/clinic/create/visit/patient/{{ patid }}/" role="button" id="new-visit">
+            New Visit
+        </a>
+        <a class="btn btn-primary" href="{% url 'clinic:edit_patient' patient.id %}" role="button" id="edit-patient">
+            Edit Patient
+        </a>
+        <a class="btn btn-secondary" href="/clinic/edit/visit/{{ visid }}/patient/{{ patid }}/" role="button">
+            Edit This Visit
+        </a>
+        <!--  -->
+        {% if match_visit %}
+        <a class="btn btn-primary" href="{% url 'clinic:print_html' visit.id %}" role="button">
+            Print Perview
+        </a>
+        <!--  -->
+        {% else %}
+        <!--  -->
+        <a class="btn btn-primary float-right" href="#add_drugs_to_prescription" role="button">
+            Print Notview
+        </a>
+        <!--  -->
+        {% endif %}
+        <br><br>
+        <hr>
+        <br>
+    </div>
+
+    <form method="post">{% csrf_token %}
+        <!--  -->
+        <div class="float-left" style="background-color:transparent;width: 400px;height: 500;">
+            <br>
+            <hr>
+            <!-- id="left-save-drug-div" -->
+            <div style="background-color: pink;">
+                {{save_medicine_form.non_field_errors}}
+            </div>
+            <!--  -->
+            {{ save_medicine_form.presc.label_tag }} {{ visit_form.presc }} <br>
+            <!--  -->
+            {{ save_medicine_form.name.label_tag }} {{ save_medicine_form.name }} <br>
+            <!--  -->
+            {{ save_medicine_form.plan.label_tag }} {{ save_medicine_form.plan}} <br>
+            <!--  -->
+            {{ save_medicine_form.patient.label_tag }} {{ visit_form.patient }} <br>
+            <!--  -->
+            {{ save_medicine_form.visit.label_tag }} {{ visit_form.visit }} <br>
+
+            <button type="submit" class="btn btn-primary" id="save_medicine_form-btn">Add Drug</button>
+            <hr>
+        </div>
+        <br>
+        <div class="float-right" style="float:right; background-color:white;  width: 700px;
+        height: 600px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+            <br>
+            <!-- id="drug-table-div" -->
+            {% render_table drug_table %}
+        </div>
+
+    </form>
+</div>
+{% endif %}
+
+<!--  -->
+{% endblock %}

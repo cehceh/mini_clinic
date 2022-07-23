@@ -1,0 +1,72 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load render_table from django_tables2 %} {% load widget_tweaks %} {% load static %}
+
+
+
+<!--  -->
+{% block content %}
+
+<h1>Add Past History for ({{patient}})</h1>
+<hr>
+<div class="container">
+    <a class="btn btn-outline-primary" href="{{ patient.edit_patient_url }}" role="button">
+        Edit Patient Data
+    </a>
+    <a class="btn btn-outline-dark" href="{% url  'visits:pass_patient_id' patient.id %}" role="button">
+        Add New Visit
+    </a>
+    <a class="btn btn-outline-dark" href="{% url  'patientdata:save_operation' patient.id %}" role="button">
+        Add Operation Details
+    </a>
+</div>
+<hr>
+<!--  -->
+<form method="POST">{% csrf_token %}
+    <!--  -->
+    <div style="background-color: pink;">
+        {{save_pasthist_form.non_field_errors}}
+    </div>
+    <div class="float-left" style="width: 35%; height: 100%; margin: 10px; padding: 20px;">
+        {{save_pasthist_form.histdate.label_tag}} {{save_pasthist_form.histdate}} <br>
+        <!--  -->
+        {{save_pasthist_form.pasthist.label_tag}} {{save_pasthist_form.pasthist}} <br>
+        <!--  -->
+        {{save_pasthist_form.remarknote.label_tag}} {{save_pasthist_form.remarknote}} <br>
+        <!--  -->
+        <!-- {{save_pasthist_form.patient.label_tag}}{{boundform.patient}}  -->
+        <!--  -->
+        <hr>
+        <button type="submit" class="btn btn-outline-dark">Add History</button>
+    </div>
+
+    <div class="float-right" style="width: 60%; height: 100%; margin: 10px; padding: 20px; background-color:white; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+        {% render_table pasthist_table %}
+    </div>
+
+</form>
+
+{% endblock %} {% block scripts %}
+<!-- Write javascript code Here -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#histdate').datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+    })
+</script>
+<!-- <script type="text/javascript" src="{% static 'js/vue.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/axios.min.js' %}"></script> -->
+<script>
+    // var editPasthist = new Vue ({
+    //     el: '#main-div',
+    //     delimiters: ['[[', ']]'],
+    //     data: {
+    //         title: "{% if edit_pasthist_form %} \
+    //                 Edit Past History \
+    //                 {% elif save_pasthist_form %} \
+    //                 Add Past History \
+    //                 {% endif %}", 
+    //     },
+    // })
+</script>
+
+{% endblock %}

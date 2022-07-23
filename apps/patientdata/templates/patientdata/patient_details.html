@@ -1,0 +1,140 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+
+<div class="container" style="position: relative; display: inline-block; height:100%; width:100%" id="dashboard">
+    
+    <h1 class="title">Details For Patient ({{ qs.name }}) </h1>
+    
+    <!-- <form class="form-inline mt-2 mt-md-0" method="GET" action="#">
+
+        <input class="form-control mr-sm-2" type="text" name='code' placeholder="Write Barcode Here..." value="{{request.GET.code}}" aria-label="Search">
+        
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        
+    </form> -->
+    <hr>
+    
+    <!-- <div class="row">   -->
+    <!-- card -->
+    <div class="column is-6 float-left" style="width: 30%; height: 100%;">
+        <div class="card card-link">
+            
+            <div class="card-content">
+                <!--<div class="media float-right" style="width: 35%; height: 35%;">
+                    <div class="media-content">
+                        {% if patient.barimg %}
+                            
+                            <a href="{% url 'patientdata:patient_details' patient.barcode %}">
+                                <img class="image" src="{{ patient.barimg.url }}"> 
+                            </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            
+                        {% endif %}
+                    </div>
+                </div> -->
+
+                <div class="content float-left" style="margin:2px; padding: 2px;">
+                    <p class="title is-4">
+                    <span class="fa fa-address-book"></span> 
+                    | Patient Data </p>
+                    <br>
+                    <hr>
+                    
+                    <p class="content is-6">
+                        <span class="fa fa-user"></span> 
+                    | Patient Name: {{ qs.name }} <br><br>
+                        <span class="fa fa-map-marker"></span> 
+                    | Address : {{ qs.address }} <br><br>
+                        <span class="fa fa-birthday-cake"></span> 
+                    | Birth Date : {{ qs.birth_date }} <br><br>
+                        <span class="fa fa-hourglass-2"></span> 
+                    | Age : {{ qs.age }} <br><br>
+                        <span class="fa fa-phone"></span> 
+                    | Phone : {{ qs.phone }} <br><br>
+                        <span class="fa fa-mobile"></span> 
+                    | Mobile : {{ qs.mobile }}
+                    </p>
+                </div> 
+            </div>
+
+            <footer class="card-footer">
+                <!-- <a class="button is-dark card-footer-item" href="{% url 'patientdata:save_patient' %}">
+                    New Patient</a>&nbsp;&nbsp; -->
+                <a href="{% url 'patientdata:edit_patient' qs.id %}" class="card-footer-item button is-primary">
+                    Edit Patient</a> &nbsp;&nbsp; 
+                    <a href="{% url 'visits:pass_patient_id' qs.id %}" class="card-footer-item button is-primary">
+                    New Visit</a> &nbsp;&nbsp;
+            </footer>
+        </div>
+    </div> 
+    <!-- <br> -->
+
+    <!-- <div class="column is-6 float-right" style="width: 50%; height: 100%;">
+        <div class="card card-link">
+            
+            <div class="card-content">
+                <div class="media float-right" style="width: 35%; height: 35%;">
+                    <div class="media-content">
+                        {% if patient.barimg %}
+                            
+                            <a href="{% url 'patientdata:patient_details' patient.barcode %}">
+                                <img class="image" src="{{ patient.barimg.url }}"> 
+                            </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="content float-left" style="width: 60%; height: 100%;">
+                    <p class="title is-4">
+                    <span class="fa fa-address-book"></span> 
+                    | Patient Data </p>
+                    <br>
+                    <hr>
+                    
+                    <p class="content is-6">
+                        <span class="fa fa-user"></span> 
+                    | Patient Name: {{ qs.name }} <br><br>
+                        <span class="fa fa-map-marker"></span> 
+                    | Address : {{ qs.address }} <br><br>
+                        <span class="fa fa-birthday-cake"></span> 
+                    | Birth Date : {{ qs.birth_date }} <br><br>
+                        <span class="fa fa-hourglass-2"></span> 
+                    | Age : {{ qs.age }} <br><br>
+                        <span class="fa fa-phone"></span> 
+                    | Phone : {{ qs.phone }} <br><br>
+                        <span class="fa fa-mobile"></span> 
+                    | Mobile : {{ qs.mobile }}
+                    </p>
+                </div> 
+            </div>
+
+            <footer class="card-footer">
+                <a class="button is-dark card-footer-item" href="{% url 'patientdata:table_patient' %}">
+                    Add Analysis</a>&nbsp;&nbsp;
+                <a href="{% url 'patientdata:edit_patient' qs.id %}" class="card-footer-item button is-primary">
+                    Add Pasthistory</a> &nbsp;&nbsp; 
+                    <a href="{% url 'visits:pass_patient_id' qs.id %}" class="card-footer-item button is-primary">
+                    New Visit</a> &nbsp;&nbsp;
+            </footer>
+        </div>
+    </div> 
+    <br> -->
+
+    <!-- </div> -->
+    <!-- <div class="column float-left" style="width: 60%; height: 100%; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;">
+        <br>
+        
+        {% render_table visit_table %}
+    </div> -->
+    {% render_table visit_table %}
+
+</div>
+
+
+{% endblock  %}
+

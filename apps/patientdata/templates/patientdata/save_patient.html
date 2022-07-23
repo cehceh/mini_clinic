@@ -1,0 +1,211 @@
+{% extends 'index.html' %} {% load static %} {% load crispy_forms_tags %} {% load widget_tweaks %} {% block content %}
+
+<div class="container" style="background-color: white;" id="savePatient">
+
+    <!-- <article class="message is-{{ message.tags }}">                 
+        <div class="message-body alert {{ message.tags }}" style="color: red;" role="alert">
+            
+            {{ savepatform.non_field_errors }}
+        </div>
+    </article> -->
+    <h1>
+        <p style="color: black;">[[title]]</p>
+    </h1>
+    <hr>
+
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="float-left" id="left-savepat-div" style="overflow-x: auto; width: 45%; height: 100%;">
+            <!-- {{savepatform.id.label_tag}} {{savepatform.id}} <br> -->
+
+            {{savepatform.name.label_tag}} {% render_field savepatform.name v-model="name" %} <br>
+            <!--  -->
+            {{savepatform.address.label_tag}} {{savepatform.address}}
+            <br>
+            <!--  -->
+            {{savepatform.birth_date.label_tag}} {% render_field savepatform.birth_date v-model="dob" id="dob" %}
+            <br> {{savepatform.age.label_tag}} {% render_field savepatform.age ::value="getAge" id="age" %}
+            <br>
+            <hr>
+
+            <button type="submit" class="btn btn-dark" id="savepatform-btn">
+                {{lable2}}
+            </button>
+
+        </div>
+        <div class="float-right" id="right-savepat-div" style="overflow-x: auto; width: 45%; height: 100%;">
+            {{savepatform.cardid.label_tag}} {% render_field savepatform.cardid v-model="cardid" %} <br>
+            <!--  -->
+            {{savepatform.phone.label_tag}} {{savepatform.phone}} <br>
+            <!--  -->
+            {{savepatform.mobile.label_tag}} {{savepatform.mobile}} <br>
+            <!--  -->
+            {{savepatform.job.label_tag}} {{savepatform.job}} <br>
+            <!-- {{savepatform.barcode.label_tag}} -->
+            <!-- {% render_field savepatform.barcode ::value="this.id + this.sign + this.dob + this.sign + this.cardid" %} -->
+            <!-- <br> -->
+            <!-- {{savepatform.barimg.label_tag}} -->
+            <!-- {% render_field savepatform.barimg %} -->
+            <!-- {% render_field savepatform.barurl ::value="this.url + this.id + this.sign + this.dob + this.sign + this.cardid" hidden="true" %} -->
+
+            <!-- <img class="image" src="{{ Patients.barimg.url }}"> -->
+            <hr>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+<!-- Here you must write the script -->
+{% block scripts %}
+<!-- <script type="text/javascript" src="{% static 'js/vue.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/axios.min.js' %}"></script> -->
+<!-- Write javascript code Here -->
+<script type="text/javascript">
+    // $(document).ready(function() {
+    //     // $('#birth-date, #visitdate').datepicker({
+    //     //     dateFormat: "yy-mm-dd"
+    //     // });
+
+    //     $('#birth-date').on('change', function() {
+    //         var dob = new Date($('#birth-date').val());
+    //         var today = new Date();
+    //         var age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000)); // $('#age').val(age); // });
+    //         $('#age').val(age);
+    //     });
+    // })
+</script>
+<script>
+    // Using Vue.js Here
+    var savePatient = new Vue({
+        el: '#savePatient',
+        delimiters: ['[[', ']]'],
+        // data () {
+        //     return 
+        data: {
+            patient_name: '',
+            title: "Add New Patient",
+            message: '{{ non_field_errors }}',
+            id: '{{ lastid }}',
+            name: '',
+            cardid: '',
+            dob: new Date(),
+            age: '',
+            url: 'http://192.168.1.120:8000/patientdata/patient/details/by/barcode/',
+            barcode: '',
+            sign: '_',
+        },
+        computed: {
+            calculateAge() {
+                this.dob = document.getElementById('dob').value;
+                var dt = new Date(this.dob);
+
+                const today = new Date();
+
+                let diff = today.getTime() - dt.getTime();
+
+                var elapsed = new Date(diff);
+                var year = elapsed.getYear(); // -70
+                var month = elapsed.getMonth();
+                var day = elapsed.getDay();
+
+                let ageYear = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
+                let ageMonth = Math.round(month);
+
+                let ageDay = Math.round(day);
+
+                var newAge = ageYear + ' Years, ' + ageMonth + ' Months, ' + ageDay + ' Days'
+
+                console.log("ageYear==::" + ageYear + ', ageMonth==:: ' + ageMonth + ', ageDay==:: ' + ageDay + " age:=: " + age)
+                return newAge;
+            },
+            getAge() {
+                this.dob = document.getElementById('dob').value;
+                // var dateString = document.getElementById('dob').value;
+                // var dt = new Date(dateString);
+                var newDate = new Date(this.dob);
+                // var newDate = new Date(dt);
+                var now = new Date();
+                var today = new Date(now.getYear(), now.getMonth(), now.getDate());
+
+                var yearNow = now.getYear();
+                var monthNow = now.getMonth();
+                var dateNow = now.getDate();
+
+                var dd = ('0' + newDate.getDate()).slice(-2);
+                var mm = ('0' + (newDate.getMonth() + 1)).slice(-2);
+                var y = newDate.getFullYear();
+
+                var formattedDate = y + '-' + mm + '-' + dd;
+                var dob = new Date(formattedDate);
+
+                var yearDob = dob.getYear();
+                var monthDob = dob.getMonth();
+                var dateDob = dob.getDate();
+                var age = {};
+                var ageString = "";
+                var yearString = "";
+                var monthString = "";
+                var dayString = "";
+
+                yearAge = yearNow - yearDob;
+
+                if (monthNow >= monthDob)
+                    var monthAge = monthNow - monthDob;
+                else {
+                    yearAge--;
+                    var monthAge = 12 + monthNow - monthDob;
+                }
+
+                if (dateNow >= dateDob)
+                    var dateAge = dateNow - dateDob;
+                else {
+                    monthAge--;
+                    var dateAge = 31 + dateNow - dateDob;
+
+                    if (monthAge < 0) {
+                        monthAge = 11;
+                        yearAge--;
+                    }
+                }
+
+                age = {
+                    years: yearAge,
+                    months: monthAge,
+                    days: dateAge
+                };
+
+                if (age.years > 1) yearString = " years";
+                else yearString = " year";
+                if (age.months > 1) monthString = " months";
+                else monthString = " month";
+                if (age.days > 1) dayString = " days";
+                else dayString = " day";
+
+                if ((age.years > 0) && (age.months > 0) && (age.days > 0))
+                    ageString = age.years + yearString + ", " + age.months + monthString + ", and " + age.days + dayString + " old.";
+                else if ((age.years == 0) && (age.months == 0) && (age.days > 0))
+                    ageString = "Only " + age.days + dayString + " old!";
+                else if ((age.years > 0) && (age.months == 0) && (age.days == 0))
+                    ageString = age.years + yearString + " old. Happy Birthday!!";
+                else if ((age.years > 0) && (age.months > 0) && (age.days == 0))
+                    ageString = age.years + yearString + " and " + age.months + monthString + " old.";
+                else if ((age.years == 0) && (age.months > 0) && (age.days > 0))
+                    ageString = age.months + monthString + " and " + age.days + dayString + " old.";
+                else if ((age.years > 0) && (age.months == 0) && (age.days > 0))
+                    ageString = age.years + yearString + " and " + age.days + dayString + " old.";
+                else if ((age.years == 0) && (age.months > 0) && (age.days == 0))
+                    ageString = age.months + monthString + " old.";
+                else ageString = "Oops! Could not calculate age!";
+
+                console.log('yearAge=:' + yearAge,
+                    'monthDob=:' + monthDob, 'dateDob=:' + dateDob, 'ageString=:' + ageString)
+
+                return ageString;
+            }
+        }
+    })
+</script>
+
+{% endblock %}

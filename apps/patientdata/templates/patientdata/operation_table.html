@@ -1,0 +1,48 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load static %} {% load render_table from django_tables2 %} {% block content %}
+
+<!-- <div class="align-content-center" style="background-color:transparent; width: 1300px; height: 900px; margin: 20px; padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey; display: grid;">
+    <p class="float-left"> -->
+<h1><strong>All Patinets Data And Operation Details</strong></h1>
+</p>
+<div>
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'patientdata:operation_table' %}">
+
+        <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here.." value="{{request.GET.pageno}}" aria-label="Search"> <br>
+
+        <button class="btn btn-secondary my-2 my-sm-0 float-left" type="submit" hidden>Search</button>
+
+    </form> &nbsp;&nbsp;
+
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'patientdata:operation_table' %}">
+
+        <input class="form-control mr-sm-2" type="text" name='patname' placeholder="Search Patient Name .." value="{{request.GET.patname}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+
+    </form> &nbsp;&nbsp;
+
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'patientdata:operation_table' %}">
+
+        <input class="form-control mr-sm-2" type="number" name='patid' placeholder="Search Patient ID .." value="{{request.GET.patid}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+
+    </form> &nbsp;&nbsp;
+
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'patientdata:operation_table' %}">
+
+        <input class="form-control mr-sm-2" type="date" name='opdate' value="{{request.GET.opdate}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+
+    </form>
+
+    <form class="form-inline mt-2 mt-md-0 float-left" method="GET" action="{% url 'patientdata:operation_table' %}">
+
+        <input class="form-control mr-sm-2" type="text" name='opname' placeholder="Search Operation Name .." value="{{request.GET.opname}}" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+
+    </form> &nbsp;&nbsp;
+
+</div>
+<br><br> {% render_table operation_table %}
+<!-- </div> -->
+
+{% endblock %}

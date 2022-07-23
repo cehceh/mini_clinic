@@ -1,0 +1,127 @@
+<!-- # -*- coding: utf-8 -*- -->
+<!--  -->
+{% load render_table from django_tables2 %} {% load querystring from django_tables2 %} {% load static %}
+
+<!-- <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
+<!DOCTYPE html>
+<html dir="auto" lang="ar">
+<!-- <html xmlns="" xml:lang="ar" lang="ar" dir="rtl"> -->
+<!-- dir="rtl" http://www.w3.org/1999/xhtml -->
+
+<head>
+    <title>عرض الملفات</title>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- <meta http-equiv="content-type" content="text/html; charset=windows-1256"> -->
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-6"> -->
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8">
+    <meta http-equiv="content-language" content="ar">
+    <link rel="" href="{% static 'fonts/Raleway.css' %}">
+    <link rel="stylesheet" href="chrome://resources/css/text_defaults_md.css">
+    <style type="text/css">
+        @font-face {
+            font-family: 'TimesNewRoman', 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif, Courier, 'serif', Tahoma, "DejaVu Sans";
+            /* src: url("D:/Django_Project/Projects/gitlab_django_clinic/myproject/static/fonts/RobotoRegular.ttf"); */
+            src: url("D:/Django_Project/Projects/gitlab_django_clinic/myproject/static/fonts/DejaVuSans.ttf");
+            /* src: url("D:/Django_Project/Projects/gitlab_django_clinic/myproject/static/fonts/Amiri-Bold.ttf"); */
+            /* src: url("D:/Django_Project/Projects/gitlab_django_clinic/myproject/static/fonts/roboto-regular.woff2") format('woff'); */
+            /* font-family: 'mywebfont'; */
+            /* src: url('adobe_regular.eot');
+            src: url('adobe_regular.eot?#iefix') format('embedded-opentype'), url('adobe_regular.woff') format('woff'), url('adobe_regular.ttf') format('truetype'), url('adobe_regular.svg#adobe_regular') format('svg'); */
+            /* font-weight: normal;
+            font-style: normal; */
+        }
+        /* html {
+            font-family: 'Droid Arabic Kufi', serif, Tahoma, "DejaVu Sans";
+            font-size: 100%;
+        } */
+        
+        body {
+            font-family: 'TimesNewRoman', 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif, Courier, 'serif', Tahoma, "DejaVu Sans";
+            font-weight: 200;
+            font-size: 14px;
+            text-align: right;
+            /* unicode-bidi: bidi-override !important; */
+        }
+        
+        .header {
+            font-size: 20px;
+            font-weight: 100;
+            text-align: center;
+            color: #007cae;
+        }
+        
+        .title {
+            font-size: 22px;
+            font-weight: 100;
+            /* text-align: right;*/
+            padding: 10px 20px 0px 20px;
+        }
+        
+        .title span {
+            color: #007cae;
+        }
+        
+        .details {
+            padding: 10px 20px 0px 20px;
+            text-align: left !important;
+            /* text-align: left !important; */
+            /*margin-left: 40%;*/
+        }
+        
+        .hrItem {
+            border: none;
+            height: 1px;
+            /* Set the hr color */
+            color: #333;
+            /* old IE */
+            background-color: #fff;
+            /* Modern Browsers */
+        }
+    </style>
+    <button>Print Me</button>
+</head>
+
+<body>
+    <button>Print Me</button>
+    <!-- <div dir="auto" style="text-align:left">اى حاجة عشان اعرف</div> -->
+    <div class='wrapper' dir="rtl" lang="ar">
+        <div class='header' dir="auto">
+            <p class='title' dir="auto">الروشتة</p>
+        </div>
+        <!-- {% comment %}
+        <div> {% endcomment %} -->
+        <div class='details' dir="auto">
+            <hr class='hrItem' /> {% for format in table.export_formats %}
+            <a href="{% querystring '_export'=format %}">
+                    download <code>.{{ format }}</code>
+            </a> {% endfor %}
+            <!--  -->
+            Visit No: {{ visit_no }}<br /> Name: {{ name }}<br /> Visit Date: {{ date }}
+            <!-- {% now "Y-m-d" %} -->
+            <!-- {% comment %} {% querystring '_export'=format %} {% endcomment %} {% comment %} {{billtable}} {% endcomment %} -->
+            <table class="fl-table" id="table">
+                <!-- class="fl-table" -->
+                <thead>
+                    <!-- <tr>
+                        <th>Drug</th>
+                        <th>Plan</th>
+                    </tr> -->
+                </thead>
+                {% for cl in qs %}
+                <tbody>
+                    <tr dir="auto" style="text-align: center;">
+                        <!-- <td>{{cl.id}}</td> -->
+                        <!-- <td>{{cl.recieveDate}}</td> -->
+                        <td>{{cl.name}}</td>
+                        <td>{{cl.plan}}</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

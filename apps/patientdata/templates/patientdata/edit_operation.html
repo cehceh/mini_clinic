@@ -1,0 +1,84 @@
+{% extends 'index.html' %} {% load crispy_forms_tags %} {% load render_table from django_tables2 %} {% load static %}
+<!--  -->
+{% load widget_tweaks %}
+<!--  -->
+
+
+{% block content %}
+<!--  -->
+
+<!-- <div class="align-content-center" style="background-color:transparent; margin: 20px; width: 100%; height: 100%;
+      padding: 10px; border-style: outset; border-radius: 20px; border-color: #aab5af; box-shadow: 2px 2px 4px 4px grey;" id="edit-pat-div"> -->
+
+<solid>
+    <h1 style="color:black">Update Operation Details for Patient ({{patient}})</h1>
+</solid>
+<hr>
+<div>
+    <a class="btn btn-outline-dark" href="#" type="button">
+            Add New Visit
+            </a>
+    <a class="btn btn-outline-dark" href="{% url 'patientdata:save_patient' %}" type="button">
+            Add New Patient
+            </a>
+    <!-- {% if match_pasthist %} -->
+    <a type="button" class="btn btn-dark" href="{% url 'pasthistory:save_pasthist' patient_id %}">
+                Add New Past History 
+            </a>
+    <!-- {% else %} -->
+
+    <!-- {% endif %} -->
+</div>
+<hr>
+
+<br><br>
+
+
+<form method="post">{% csrf_token %}
+    <!--  -->
+    <div class="float-left" style="width:45%; height: 100%;" id="left">
+        <!--  -->
+        <!-- <hr> -->
+        <!--  -->
+        <div style="background-color: pink;">
+            {{form.non_field_errors}}
+        </div>
+        <!--  -->
+        <label class="label">Operation Name:</label> {{form.name}} <br>
+        <!--  -->
+        <label class="label">Operation Date:</label> {{form.opdate}} <br>
+        <!--  -->
+        <label class="label">Amount:</label> {% render_field form.amount class="form-control" type="number" %} <br>
+        <!--  -->
+        <label class="label" for="heal">Heal:</label>
+        <label class="switch"> 
+                {% render_field form.heal id="heal" %}
+                <span class="slider round"></span>
+        </label>
+        <hr><br>
+        <button type="submit" class="btn btn-outline-primary">Update</button>
+        <!-- <input type="submit" class="btn-outline-danger" role="button" value="Save" id="vis-form-btn" /> -->
+    </div>
+    <div class="float-right" style="width:45%; height: 100%;" id="right">
+        <!-- <hr> -->
+        <!--  -->
+        <label class="label">Follow Up:</label> {{form.followup}} <br />
+        <!--  -->
+        <label class="label">Improvement:</label> {{form.improve}} <br />
+
+        <!--  -->
+        <label class="label">Description:</label> {{form.remark}} <br>
+
+        <hr>
+    </div>
+</form>
+
+{% endblock %}
+
+<!-- Here you must write the script -->
+{% block scripts %}
+<!-- Write javascript code Here -->
+<script type="text/javascript">
+</script>
+
+{% endblock %}

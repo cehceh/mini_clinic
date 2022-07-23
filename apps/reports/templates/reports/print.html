@@ -1,0 +1,131 @@
+{% extends 'index.html' %}
+{% load static %} 
+
+{% load render_table from django_tables2 %} 
+
+{% load querystring from django_tables2 %} 
+
+
+{% block content %}
+
+        <br>
+        <div class="container">
+                <a type="button" class="btn btn-outline-primary" href="{% url 'reports:calculate_year_income' %}">
+                    Back To Year Report
+                </a>
+                <button class="btn btn-outline-primary" id="print" onclick="printData()">
+                <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                Print 
+                <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                </button>
+
+        </div>
+        <hr>
+
+        <div>
+            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'reports:print_html' %}">
+
+                <input class="form-control mr-sm-2" type="number" name='pageno' placeholder="Edit pagination pages here.." value="{{request.GET.pageno}}" aria-label="Search"> <br>
+            
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" hidden>Search</button>
+                
+            </form>
+        </div>
+
+
+        <div class="align-content-center" style="margin: 20px; padding: 10px;" id="pdata">
+        <!-- <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R\
+        </h4> -->
+        
+        
+            <!-- <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-wrapper">
+                            <table class="fl-table" id="table"> 
+                                <thead>
+                                    <tr>
+                                        <th>Visit ID <hr></th> 
+                                        <th>Patient Name <hr></th> 
+                                        <th>Visit Date <hr></th> 
+                                        <th>Amount <hr></th>
+                                    </tr>
+                                </thead>
+                                {% for cl in qs_page %}
+                                    <tbody>
+                                        <tr>
+                                            <td>{{cl.id}} <br><hr></td> 
+                                            <td>{{cl.patient}} <br><hr></td>
+                                            <td>{{cl.visitdate}} <br><hr></td>
+                                            <td>{{cl.amount}} <br><hr></td> 
+                                            
+                                        </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> -->
+
+        <!-- table -->
+        <div class="container" id='div-table' style="width: 100%;height: 100%;">
+            {% render_table visit_table %}
+        </div>
+
+
+        {% include "home/pagination.html" with page=qs_page %}
+
+    <!-- </body>
+</html> -->
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+    // function printData() {
+    //     // var spanToPrint = document.getElementById("p");
+    //     var divPrint = document.getElementById("pdata");
+    //     var divToPrint = document.getElementById("div-table");
+    //     newWin = window.open("");
+    //     // newWin.document.write(spanToPrint.innerHTML + divToPrint.outerHTML);
+    //     newWin.document.write(divPrint.outerHTML + divToPrint.outerHTML);
+    //     newWin.print();
+    //     newWin.close();
+    // } // + imgToPrint.innerHTML 
+    function printData() {
+    var divToPrint = document.getElementById('pdata');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+        'table th, table td {' +
+        'border:1px solid #000;' +
+        'padding:0.5em;' +
+        'width:100%;' +
+        'white-space:nowrap;' + // this line to make the cells flixable
+        '}' +
+        'p {' +
+        'text-align: right' +
+        'margin-bottom:0;' +
+        'padding:0;' +
+        'line-height:12px;' +
+        'font-size:10px;' +
+        '}' +
+        '@media print {' +
+        'nav { visibility: hidden; }' + // for remove pagination from    
+        // printing
+        '}' +
+        '</style>';
+    htmlToPrint += divToPrint.outerHTML;
+    newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+}
+
+</script>
+{% endblock  %}
+    

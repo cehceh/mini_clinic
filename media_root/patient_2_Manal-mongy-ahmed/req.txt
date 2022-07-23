@@ -1,0 +1,57 @@
+altgraph==0.17
+auto-py-to-exe==2.7.8
+beautifulsoup4==4.9.1
+bottle==0.12.18
+bottle-websocket==0.2.9
+cefpython3==66.0
+certifi==2020.6.20
+cffi==1.14.2
+cycler==0.10.0
+Cython @ file:///C:/ci/cython_1594829190914/work
+Django==2.2.13
+django-bootstrap-forms==0.1
+django-bootstrap4==2.2.0
+django-crispy-forms==1.9.2
+django-jquery==3.1.0
+django-tables2==2.3.1
+Eel==0.12.4
+future==0.18.2
+gevent==20.6.2
+gevent-websocket==0.10.1
+greenlet==0.4.16
+html5lib==1.1
+kiwisolver==1.2.0
+matplotlib @ file:///C:/ci/matplotlib-base_1597876438601/work
+misaka==2.1.1
+mkl-fft==1.1.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+mysqlclient==2.0.1
+numpy @ file:///C:/ci/numpy_and_numpy_base_1596215850360/work
+olefile==0.46
+pefile==2019.4.18
+Pillow @ file:///C:/ci/pillow_1594298230227/work
+psycopg2==2.8.6
+pycparser==2.20
+pyinstaller==4.0
+pyinstaller-hooks-contrib==2020.8
+pyparsing==2.4.7
+PyPDF2==1.26.0
+pystan==2.18.0.0
+python-dateutil==2.8.1
+pytz==2020.1
+pywin32-ctypes==0.2.0
+reportlab==3.5.49
+sip==4.19.13
+six==1.15.0
+soupsieve==2.0.1
+sqlparse==0.3.1
+tablib==2.0.0
+tornado==6.0.4
+webencodings==0.5.1
+whichcraft==0.6.1
+wincertstore==0.2
+xhtml2pdf==0.2.4
+yapf @ file:///tmp/build/80754af9/yapf_1593528177422/work
+zope.event==4.4
+zope.interface==5.1.0
